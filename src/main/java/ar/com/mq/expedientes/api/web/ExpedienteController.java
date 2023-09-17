@@ -31,9 +31,9 @@ public class ExpedienteController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> update(@PathVariable String id, @RequestBody ExpedienteDTO expedienteDTO){
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody ExpedienteDTO expedienteDTO){
         log.debug("Por actualizar expediente {}", expedienteDTO);
-        this.expedienteService.update(expedienteDTO);
+        this.expedienteService.update(id,expedienteDTO);
         return new ResponseEntity<>("Expediente actualizado exitosamente", HttpStatus.OK);
     }
 

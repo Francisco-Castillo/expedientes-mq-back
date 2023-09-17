@@ -21,6 +21,12 @@ public class Parametro extends MunicipalidadMQEntity {
     @Column(name = "id")
     private Long id;
 
+    private String nombre;
+
+    private String valor;
+
+    private String descripcion;
+
     @Override
     public Serializable getPrimaryKey() {
         return id;

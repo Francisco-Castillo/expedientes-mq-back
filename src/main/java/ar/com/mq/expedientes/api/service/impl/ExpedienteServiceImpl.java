@@ -9,20 +9,24 @@ import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedienteMapper;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedientePagoMapper;
 import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
 import ar.com.mq.expedientes.api.service.repository.ExpedienteRepository;
+import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -41,6 +45,7 @@ public class ExpedienteServiceImpl implements ExpedienteService {
 
     @Override
     public void save(ExpedientePagoDTO expediente) {
+        //if(expediente.getNumero())
         ExpedientePago expedientePago = this.expedientePagoMapper.toEntity(expediente);
         this.expedienteRepository.save(expedientePago);
     }
@@ -51,7 +56,9 @@ public class ExpedienteServiceImpl implements ExpedienteService {
     }
 
     @Override
-    public void update(ExpedienteDTO expediente) {
+    public void update(Long id, ExpedienteDTO expediente) {
+
+        if (!expedienteRepository.existsById(id)) throw  MunicipalidadMQRuntimeException.notFoundException("No se encontro expediente");
 
     }
 
@@ -106,5 +113,11 @@ public class ExpedienteServiceImpl implements ExpedienteService {
 
         return wrapperData;
 
+    }
+
+    @Override
+    public ExpedienteDTO findById(Long id) {
+        return this.expedienteRepository.findById(id).map(this.expedienteMapper::toDTO)
+                .orElseThrow(() -> MunicipalidadMQRuntimeException.notFoundException("No se encontro expediente"));
     }
 }

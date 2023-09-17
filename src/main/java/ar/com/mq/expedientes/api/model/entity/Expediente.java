@@ -4,6 +4,7 @@ import ar.com.mq.expedientes.core.business.bean.MunicipalidadMQEntity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.*;
 
@@ -41,6 +42,19 @@ public class Expediente extends MunicipalidadMQEntity {
 
     @Column(insertable = false, updatable = false)
     private String tipo;
+
+    @OneToMany(mappedBy = "expediente", fetch = FetchType.LAZY)
+    private List<Documento> documentos;
+
+    public Expediente(Long id, String numero, String referencia, LocalDateTime fechaCaratulacion, String descripcion, String codigoTramite, String tipo) {
+        this.id = id;
+        this.numero = numero;
+        this.referencia = referencia;
+        this.fechaCaratulacion = fechaCaratulacion;
+        this.descripcion = descripcion;
+        this.codigoTramite = codigoTramite;
+        this.tipo = tipo;
+    }
 
     @Override
     public Serializable getPrimaryKey() {
