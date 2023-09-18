@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/expedientes")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @Slf4j
 public class ExpedienteController {
 
