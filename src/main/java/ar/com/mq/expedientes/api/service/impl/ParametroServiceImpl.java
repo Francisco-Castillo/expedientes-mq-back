@@ -44,5 +44,11 @@ public class ParametroServiceImpl implements ParametroService {
         }
     }
 
+    @Override
+    public void updateValue(String name, String value) {
+        log.info("Por actualizar parametro {} con el valor {}", name, value);
+        this.parametroRepository.updateValue(name, value);
+    }
+
 
 }

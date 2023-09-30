@@ -8,4 +8,6 @@ public interface ParametroService {
     String getDirectorioDeAlmacenamiento();
 
     ParametroDTO findByNombre(String nombre);
+
+    void updateValue(String name, String value);
 }

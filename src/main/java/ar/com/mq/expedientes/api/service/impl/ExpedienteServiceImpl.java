@@ -1,5 +1,6 @@
 package ar.com.mq.expedientes.api.service.impl;
 
+import ar.com.mq.expedientes.api.enums.ParametroEnum;
 import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
 import ar.com.mq.expedientes.api.model.dto.ExpedientePagoDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
@@ -8,6 +9,7 @@ import ar.com.mq.expedientes.api.model.entity.ExpedientePago;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedienteMapper;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedientePagoMapper;
 import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
+import ar.com.mq.expedientes.api.service.interfaces.ParametroService;
 import ar.com.mq.expedientes.api.service.repository.ExpedienteRepository;
 import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,19 +37,31 @@ public class ExpedienteServiceImpl implements ExpedienteService {
     private final ExpedienteRepository expedienteRepository;
     private final ExpedientePagoMapper expedientePagoMapper;
     private final ExpedienteMapper expedienteMapper;
+    private final ParametroService parametroService;
 
     @Autowired
-    public ExpedienteServiceImpl(ExpedienteRepository expedienteRepository, ExpedientePagoMapper expedientePagoMapper, ExpedienteMapper expedienteMapper) {
+    public ExpedienteServiceImpl(ExpedienteRepository expedienteRepository, ExpedientePagoMapper expedientePagoMapper, ExpedienteMapper expedienteMapper, ParametroService parametroService) {
         this.expedienteRepository = expedienteRepository;
         this.expedientePagoMapper = expedientePagoMapper;
         this.expedienteMapper = expedienteMapper;
+        this.parametroService = parametroService;
     }
 
     @Override
     public void save(ExpedientePagoDTO expediente) {
-        //if(expediente.getNumero())
+
+        String number = expediente.getNumero();
+
+        if (expediente.getNumero().contains("-")) {
+            int middleDashPosition = expediente.getNumero().indexOf("-");
+            number = expediente.getNumero().substring(0, middleDashPosition);
+        }
+
         ExpedientePago expedientePago = this.expedientePagoMapper.toEntity(expediente);
+
         this.expedienteRepository.save(expedientePago);
+
+        this.parametroService.updateValue(ParametroEnum.ULTIMO_NUMERO_DE_EXPEDIENTE.getValue(), number);
     }
 
     @Override
@@ -58,7 +72,8 @@ public class ExpedienteServiceImpl implements ExpedienteService {
     @Override
     public void update(Long id, ExpedienteDTO expediente) {
 
-        if (!expedienteRepository.existsById(id)) throw  MunicipalidadMQRuntimeException.notFoundException("No se encontro expediente");
+        if (!expedienteRepository.existsById(id))
+            throw MunicipalidadMQRuntimeException.notFoundException("No se encontro expediente");
 
     }
 
