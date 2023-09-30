@@ -10,4 +10,6 @@ public interface ParametroRepository extends JpaRepository<Parametro, Long> {
 
     @Query(value = "SELECT p.valor FROM Parametro p WHERE p.nombre =:nombre")
     String getValor(String nombre);
+
+    Parametro findByNombre(String nombre);
 }
