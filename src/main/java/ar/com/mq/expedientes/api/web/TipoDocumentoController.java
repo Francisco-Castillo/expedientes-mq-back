@@ -5,6 +5,8 @@ import ar.com.mq.expedientes.api.model.dto.TipoDocumentoDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
 import ar.com.mq.expedientes.api.service.interfaces.TipoDocumentoService;
+import ar.com.mq.expedientes.core.constants.SwaggerTags;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/tipos-documentos")
 @CrossOrigin("*")
 @Slf4j
+@Api(tags= {SwaggerTags.TIPOS_DOCUMENTOS_TAG})
 public class TipoDocumentoController {
 
     private final TipoDocumentoService tipoDocumentoService;

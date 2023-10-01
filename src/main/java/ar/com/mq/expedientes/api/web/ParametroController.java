@@ -2,6 +2,8 @@ package ar.com.mq.expedientes.api.web;
 
 import ar.com.mq.expedientes.api.model.dto.ParametroDTO;
 import ar.com.mq.expedientes.api.service.interfaces.ParametroService;
+import ar.com.mq.expedientes.core.constants.SwaggerTags;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/parametros")
+@Api(tags= {SwaggerTags.PARAMETROS_TAG})
 public class ParametroController {
 
     private final ParametroService parametroService;

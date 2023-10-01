@@ -4,6 +4,9 @@ import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
 import ar.com.mq.expedientes.api.model.dto.ExpedientePagoDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
+import ar.com.mq.expedientes.core.constants.SwaggerTags;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/expedientes")
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @Slf4j
+@Api(tags= {SwaggerTags.EXPEDIENTES_TAG})
 public class ExpedienteController {
 
     private final ExpedienteService expedienteService;

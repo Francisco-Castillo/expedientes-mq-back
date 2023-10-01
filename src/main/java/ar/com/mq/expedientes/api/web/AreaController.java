@@ -1,7 +1,10 @@
 package ar.com.mq.expedientes.api.web;
 
 import ar.com.mq.expedientes.api.model.dto.AreaDTO;
+import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.AreaService;
+import ar.com.mq.expedientes.core.constants.SwaggerTags;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/areas")
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @Slf4j
+@Api(tags = {SwaggerTags.AREA_TAG})
 public class AreaController {
     private final AreaService areaService;
 
@@ -24,5 +28,18 @@ public class AreaController {
     public ResponseEntity<Object> save(@RequestBody AreaDTO area) {
         this.areaService.save(area);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> findAll(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
+            @RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
+            @RequestParam(value = "search", required = false, defaultValue = "") String search) {
+
+        WrapperData data = this.areaService.findAll(page, size, search, orderBy, orientation);
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

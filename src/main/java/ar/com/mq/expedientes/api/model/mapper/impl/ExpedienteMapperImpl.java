@@ -27,6 +27,7 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
                 .descripcion(dto.getDescripcion())
                 .codigoTramite(dto.getCodigoTramite())
                 .tipo(dto.getTipo())
+                .estado(dto.getEstado())
                 .build();
     }
 
@@ -42,6 +43,7 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
                 .descripcion(entity.getDescripcion())
                 .codigoTramite(entity.getCodigoTramite())
                 .tipo(entity.getTipo())
+                .estado(entity.getEstado())
                 .build();
     }
 

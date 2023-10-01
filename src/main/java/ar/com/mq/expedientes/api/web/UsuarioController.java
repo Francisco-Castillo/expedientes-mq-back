@@ -3,6 +3,8 @@ package ar.com.mq.expedientes.api.web;
 import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.UsuarioService;
+import ar.com.mq.expedientes.core.constants.SwaggerTags;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/usuarios")
+@Api(tags= {SwaggerTags.USUARIOS_TAG})
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
