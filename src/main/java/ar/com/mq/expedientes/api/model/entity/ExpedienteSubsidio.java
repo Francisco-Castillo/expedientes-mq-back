@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +16,8 @@ import java.time.LocalDateTime;
 public class ExpedienteSubsidio extends Expediente{
 
     @Builder(builderMethodName = "expedienteSubsidioBuilder")
-    public ExpedienteSubsidio(Long id, String numero, String referencia, LocalDateTime fechaCaratulacion, String descripcion, String codigoTramite, String tipo) {
-        super(id, numero, referencia, fechaCaratulacion, descripcion, codigoTramite, tipo);
+
+    public ExpedienteSubsidio(Long id, String numero, String referencia, LocalDateTime fechaCaratulacion, String descripcion, String codigoTramite, String tipo, String estado, Integer cantidadFojas, BigDecimal monto) {
+        super(id, numero, referencia, fechaCaratulacion, descripcion, codigoTramite, tipo, estado, cantidadFojas, monto);
     }
 }

@@ -23,6 +23,9 @@ public class ExpedientePagoMapperImpl implements ExpedientePagoMapper {
                 .fechaCaratulacion(dto.getFechaCaratulacion())
                 .descripcion(dto.getDescripcion())
                 .codigoTramite(dto.getCodigoTramite())
+                .cantidadFojas(dto.getCantidadFojas())
+                .monto(dto.getMonto())
+                .estado(dto.getEstado())
                 .build();
     }
 
@@ -37,6 +40,9 @@ public class ExpedientePagoMapperImpl implements ExpedientePagoMapper {
                 .fechaCaratulacion(entity.getFechaCaratulacion())
                 .descripcion(entity.getDescripcion())
                 .codigoTramite(entity.getCodigoTramite())
+                .cantidadFojas(entity.getCantidadFojas())
+                .monto(entity.getMonto())
+                .estado(entity.getEstado())
                 .build();
     }
 

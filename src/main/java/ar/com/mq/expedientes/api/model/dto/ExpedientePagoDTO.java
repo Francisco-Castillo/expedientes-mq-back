@@ -2,6 +2,7 @@ package ar.com.mq.expedientes.api.model.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -10,7 +11,8 @@ import java.time.LocalDateTime;
 public class ExpedientePagoDTO extends ExpedienteDTO{
 
     @Builder(builderMethodName = "expedientePagoDTOBuilder")
-    public ExpedientePagoDTO(Long id, String numero, String referencia, LocalDateTime fechaCaratulacion, String descripcion, String codigoTramite, String tipo) {
-        super(id, numero, referencia, fechaCaratulacion, descripcion, codigoTramite, tipo);
+
+    public ExpedientePagoDTO(Long id, String numero, String referencia, LocalDateTime fechaCaratulacion, String descripcion, String codigoTramite, String tipo, int cantidadFojas, BigDecimal monto, String estado, LocalDateTime ultimaActualizacion) {
+        super(id, numero, referencia, fechaCaratulacion, descripcion, codigoTramite, tipo, cantidadFojas, monto, estado, ultimaActualizacion);
     }
 }
