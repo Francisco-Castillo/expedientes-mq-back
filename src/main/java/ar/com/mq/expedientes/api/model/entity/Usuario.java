@@ -35,6 +35,10 @@ public class Usuario extends MunicipalidadMQEntity {
     @Column(name = "fecha_alta")
     private LocalDateTime fechaAlta;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "area_id")
+    private Area areaId;
+
     @Override
     public Serializable getPrimaryKey() {
         return this.id;
