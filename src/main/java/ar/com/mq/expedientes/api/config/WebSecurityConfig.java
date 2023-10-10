@@ -38,7 +38,7 @@ public class WebSecurityConfig {
         return http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/authenticate", "/register","/login","/swagger-ui/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .httpBasic()
                 .and()
