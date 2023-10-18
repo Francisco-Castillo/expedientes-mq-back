@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/usuarios")
 @Api(tags= {SwaggerTags.USUARIOS_TAG})
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class UsuarioController {
 
     private final UsuarioService usuarioService;

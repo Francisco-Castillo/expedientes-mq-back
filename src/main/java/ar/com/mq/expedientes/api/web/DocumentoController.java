@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin(value = "*")
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @RequestMapping(value = "/documentos")
 @RestController
 @Slf4j
 @Api(tags= {SwaggerTags.DOCUMENTOS_TAG})
+
 public class DocumentoController {
 
     private final DocumentoService documentoService;

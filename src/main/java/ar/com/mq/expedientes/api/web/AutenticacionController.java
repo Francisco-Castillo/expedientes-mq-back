@@ -7,14 +7,12 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/authenticate")
 @Api(tags= {SwaggerTags.AUTENTICACION_TAG})
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class AutenticacionController {
 
     private final UsuarioService usuarioService;
