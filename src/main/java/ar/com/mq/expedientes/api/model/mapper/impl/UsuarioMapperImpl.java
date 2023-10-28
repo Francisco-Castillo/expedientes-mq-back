@@ -1,17 +1,13 @@
 package ar.com.mq.expedientes.api.model.mapper.impl;
 
-import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
 import ar.com.mq.expedientes.api.model.dto.UsuarioBaseDTO;
 import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
-import ar.com.mq.expedientes.api.model.entity.Area;
 import ar.com.mq.expedientes.api.model.entity.Usuario;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.AreaMapper;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.UsuarioMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,14 +17,11 @@ import java.util.List;
 @Component
 public class UsuarioMapperImpl implements UsuarioMapper {
 
-
-    private final PasswordEncoder passwordEncoder;
     private final AreaMapper areaMapper;
 
     @Autowired
     public UsuarioMapperImpl(AreaMapper areaMapper) {
         this.areaMapper = areaMapper;
-        passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @Override
@@ -41,7 +34,6 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         return Usuario.builder()
                 .id(dto.getId())
                 .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword()))
                 .fechaAlta(dto.getFechaAlta())
                 .uuid(dto.getUuid())
                 .areaId(this.areaMapper.toEntity(dto.getArea()))

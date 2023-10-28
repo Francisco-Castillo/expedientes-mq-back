@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Usuario")
@@ -38,6 +39,12 @@ public class Usuario extends MunicipalidadMQEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "area_id")
     private Area areaId;
+
+    @OneToMany(mappedBy = "usuarioEmisor", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Pase> pasesEnviados;
+
+    @OneToMany(mappedBy = "usuarioReceptor",  cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Pase> pasesRecibidos;
 
     @Override
     public Serializable getPrimaryKey() {

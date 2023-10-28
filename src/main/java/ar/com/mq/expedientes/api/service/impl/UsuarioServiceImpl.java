@@ -1,24 +1,20 @@
 package ar.com.mq.expedientes.api.service.impl;
 
-import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
 import ar.com.mq.expedientes.api.model.dto.UsuarioBaseDTO;
 import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
-import ar.com.mq.expedientes.api.model.entity.Expediente;
 import ar.com.mq.expedientes.api.model.entity.Usuario;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.UsuarioMapper;
 import ar.com.mq.expedientes.api.service.interfaces.UsuarioService;
 import ar.com.mq.expedientes.api.service.repository.UsuarioRepository;
-import ar.com.mq.expedientes.core.security.model.dto.UserDetailsImpl;
+import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
 import ar.com.mq.expedientes.core.utils.ZonedUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -31,7 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
+public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
 
@@ -50,28 +46,33 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = this.usuarioRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No se encontro al usuario con el email " + username));
-
-        UsuarioDTO usuarioDTO = this.usuarioMapper.toDTO(usuario);
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(usuarioDTO);
-
-        return userDetails;
-    }
-
-    @Override
     public UsuarioDTO getUserInfo(String username) {
-        Usuario usuario = this.usuarioRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No se encontro al usuario con el email " + username));
-
-        return UsuarioDTO.builder()
-                .id(usuario.getId())
-                .email(usuario.getEmail())
-                .build();
-
+        return null;
     }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        Usuario usuario = this.usuarioRepository.findByEmail(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("No se encontro al usuario con el email " + username));
+//
+//        UsuarioDTO usuarioDTO = this.usuarioMapper.toDTO(usuario);
+//
+//        UserDetailsImpl userDetails = new UserDetailsImpl(usuarioDTO);
+//
+//        return userDetails;
+//    }
+//
+//    @Override
+//    public UsuarioDTO getUserInfo(String username) {
+//        Usuario usuario = this.usuarioRepository.findByEmail(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("No se encontro al usuario con el email " + username));
+//
+//        return UsuarioDTO.builder()
+//                .id(usuario.getId())
+//                .email(usuario.getEmail())
+//                .build();
+//
+//    }
 
     @Override
     public WrapperData findAll(int page, int size, String search, String orderBy, String orientation) {
@@ -117,5 +118,17 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
         return wrapperData;
 
+    }
+
+    @Override
+    public Usuario findByEmail(String email) {
+
+        Usuario usuario =  this.usuarioRepository.findByEmail(email).orElse(null);
+
+        if (ObjectUtils.isEmpty(usuario)){
+            throw MunicipalidadMQRuntimeException.notFoundException("No se encontro usuario");
+        }
+
+        return usuario;
     }
 }

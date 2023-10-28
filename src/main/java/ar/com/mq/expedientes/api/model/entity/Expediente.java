@@ -57,6 +57,9 @@ public class Expediente extends MunicipalidadMQEntity {
     @OneToMany(mappedBy = "expediente", fetch = FetchType.LAZY)
     private List<Documento> documentos;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "expediente", orphanRemoval = true)
+    private List<Pase> pases;
+
     public Expediente(Long id, String numero, String referencia, LocalDateTime fechaCaratulacion, String descripcion,
                       String codigoTramite, String tipo, String estado, Integer cantidadFojas, BigDecimal monto) {
         this.id = id;

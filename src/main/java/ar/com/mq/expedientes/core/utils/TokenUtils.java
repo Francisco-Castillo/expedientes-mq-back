@@ -1,13 +1,10 @@
 package ar.com.mq.expedientes.core.utils;
 
-import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +35,7 @@ public class TokenUtils {
 
     }
 
+    /*
     public static UsernamePasswordAuthenticationToken getAuthentication(String token) {
         try {
 
@@ -62,6 +60,6 @@ public class TokenUtils {
         } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | SignatureException | IllegalArgumentException e) {
             return null;
         }
-    }
+    }*/
 
 }
