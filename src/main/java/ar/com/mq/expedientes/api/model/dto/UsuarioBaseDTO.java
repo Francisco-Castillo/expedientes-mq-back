@@ -12,6 +12,17 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UsuarioBaseDTO extends MunicipalidadMQDTO {
 
+    private String nombre;
+
+    private String apellido;
+
+    private String documento;
+
+    private Integer estado;
+
+    private Integer primerLogin; //0 - Si 1- NO
+
     private String email;
+
     private AreaDTO area;
 }

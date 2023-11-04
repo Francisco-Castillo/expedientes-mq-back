@@ -29,6 +29,12 @@ public class UsuarioController {
         return new ResponseEntity(userInfo, HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<Object> create(@RequestBody UsuarioDTO usuario) {
+        this.usuarioService.create(usuario);
+        return new ResponseEntity("OK", HttpStatus.CREATED);
+    }
+
     @GetMapping
     public ResponseEntity<Object> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
                                           @RequestParam(value = "size", defaultValue = "10") int size,
@@ -37,5 +43,11 @@ public class UsuarioController {
                                           @RequestParam(value = "search", required = false, defaultValue = "") String search) {
         WrapperData data = this.usuarioService.findAll(page, size, search, orderBy, orientation);
         return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/cambiar-password")
+    public ResponseEntity<Object> changePassword(@RequestBody UsuarioDTO user){
+        this.usuarioService.changePassword(user.getId(), user.getPassword());
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 }

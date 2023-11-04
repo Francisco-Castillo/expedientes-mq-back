@@ -30,7 +30,11 @@ public class LoginServiceImpl implements LoginService {
             Usuario usuario = this.usuarioService.findByEmail(login.getUsername());
 
             if (!PasswordUtils.encriptar(login.getPassword()).equals(usuario.getPassword())){
-                throw MunicipalidadMQRuntimeException.conflictException("Usuario o password incorrectos");
+                throw MunicipalidadMQRuntimeException.conflictException("Usuario o contraseña incorrectos");
+            }
+
+            if (usuario.getPrimerLogin()==0){
+                throw MunicipalidadMQRuntimeException.conflictException("Debe cambiar su contraseña.");
             }
 
             return  "Bearer "+ TokenUtils.create(usuario.getId(), usuario.getEmail());

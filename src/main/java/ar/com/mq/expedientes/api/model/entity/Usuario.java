@@ -24,6 +24,12 @@ public class Usuario extends MunicipalidadMQEntity {
     @Column(name = "id")
     private Long id;
 
+    private String nombre;
+
+    private String apellido;
+
+    private String dni;
+
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
@@ -35,6 +41,13 @@ public class Usuario extends MunicipalidadMQEntity {
 
     @Column(name = "fecha_alta")
     private LocalDateTime fechaAlta;
+
+    private Integer estado;
+
+    private Integer primerLogin;
+
+    @Column(name = "fecha_baja")
+    private String fechaBaja;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "area_id")

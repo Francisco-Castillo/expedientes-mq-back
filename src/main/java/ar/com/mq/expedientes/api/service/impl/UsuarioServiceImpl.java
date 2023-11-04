@@ -8,7 +8,9 @@ import ar.com.mq.expedientes.api.model.mapper.interfaces.UsuarioMapper;
 import ar.com.mq.expedientes.api.service.interfaces.UsuarioService;
 import ar.com.mq.expedientes.api.service.repository.UsuarioRepository;
 import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
+import ar.com.mq.expedientes.core.utils.PasswordUtils;
 import ar.com.mq.expedientes.core.utils.ZonedUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +26,17 @@ import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
+
+    private static final Integer ACTIVO = 1;
+    private static final Integer NO = 0;
 
     @Autowired
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
@@ -39,9 +46,19 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void create(UsuarioDTO usuarioDTO) {
+
+        Optional<Usuario> usuario = this.usuarioRepository.findByEmail(usuarioDTO.getEmail());
+
+        if (usuario.isPresent()) {
+            throw MunicipalidadMQRuntimeException.conflictException("Ya existe un usuario registrado con el correo " + usuarioDTO.getEmail());
+        }
+
         usuarioDTO.setUuid(UUID.randomUUID().toString());
         usuarioDTO.setFechaAlta(LocalDateTime.now(ZonedUtils.ARGENTINA()));
+        usuarioDTO.setEstado(ACTIVO);
+        usuarioDTO.setPrimerLogin(NO);
         Usuario toEntity = this.usuarioMapper.toEntity(usuarioDTO);
+
         this.usuarioRepository.save(toEntity);
     }
 
@@ -123,12 +140,37 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario findByEmail(String email) {
 
-        Usuario usuario =  this.usuarioRepository.findByEmail(email).orElse(null);
+        Usuario usuario = this.usuarioRepository.findByEmail(email).orElse(null);
 
-        if (ObjectUtils.isEmpty(usuario)){
+        if (ObjectUtils.isEmpty(usuario)) {
             throw MunicipalidadMQRuntimeException.notFoundException("No se encontro usuario");
         }
 
         return usuario;
+    }
+
+    @Override
+    public void changePassword(Long userId, String password) {
+        try {
+            Optional<Usuario> user = this.usuarioRepository.findById(userId);
+
+            if (user.isEmpty()) {
+                throw MunicipalidadMQRuntimeException.conflictException("No se encontro usuario");
+            }
+
+            if (user.get().getEstado() == 0) {
+                throw MunicipalidadMQRuntimeException.conflictException("Usuario inactivo");
+            }
+
+            if (user.get().getPassword().equals(PasswordUtils.encriptar(password))){
+                throw MunicipalidadMQRuntimeException.badRequestException("La nueva contraseña debe ser diferente a la actual");
+            }
+
+            this.usuarioRepository.changePassword(userId, PasswordUtils.encriptar(password));
+
+        } catch (Exception e) {
+            log.error("Ocurrio un error al intentar actualizar password para el usuario {}. Excepcion: {} ", userId, e.getLocalizedMessage());
+            throw MunicipalidadMQRuntimeException.conflictException(e.getLocalizedMessage());
+        }
     }
 }

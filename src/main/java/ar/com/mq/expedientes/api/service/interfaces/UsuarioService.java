@@ -13,4 +13,6 @@ public interface UsuarioService {
     WrapperData findAll(int page, int size, String search, String orderBy, String orientation);
 
     Usuario findByEmail(String email);
+
+    void changePassword(Long userId, String password);
 }

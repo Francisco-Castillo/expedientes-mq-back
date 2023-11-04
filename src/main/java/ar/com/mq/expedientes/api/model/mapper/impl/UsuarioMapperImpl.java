@@ -5,6 +5,7 @@ import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
 import ar.com.mq.expedientes.api.model.entity.Usuario;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.AreaMapper;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.UsuarioMapper;
+import ar.com.mq.expedientes.core.utils.PasswordUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,14 @@ public class UsuarioMapperImpl implements UsuarioMapper {
 
         return Usuario.builder()
                 .id(dto.getId())
+                .nombre(dto.getNombre())
+                .apellido(dto.getApellido())
+                .dni(dto.getDocumento())
+                .estado(dto.getEstado())
+                .primerLogin(dto.getPrimerLogin())
                 .email(dto.getEmail())
                 .fechaAlta(dto.getFechaAlta())
+                .password(PasswordUtils.encriptar(dto.getPassword()))
                 .uuid(dto.getUuid())
                 .areaId(this.areaMapper.toEntity(dto.getArea()))
                 .build();
@@ -48,6 +55,11 @@ public class UsuarioMapperImpl implements UsuarioMapper {
 
         return UsuarioDTO.builder()
                 .id(entity.getId())
+                .nombre(entity.getNombre())
+                .apellido(entity.getApellido())
+                .documento(entity.getDni())
+                .estado(entity.getEstado())
+                .primerLogin(entity.getPrimerLogin())
                 .email(entity.getEmail())
                 .password(entity.getPassword())
                 .fechaAlta(entity.getFechaAlta())
@@ -63,6 +75,11 @@ public class UsuarioMapperImpl implements UsuarioMapper {
 
         return UsuarioBaseDTO.builder()
                 .email(entity.getEmail())
+                .nombre(entity.getNombre())
+                .apellido(entity.getApellido())
+                .documento(entity.getDni())
+                .estado(entity.getEstado())
+                .primerLogin(entity.getPrimerLogin())
                 .area(this.areaMapper.toDTO(entity.getAreaId()))
                 .build();
     }
