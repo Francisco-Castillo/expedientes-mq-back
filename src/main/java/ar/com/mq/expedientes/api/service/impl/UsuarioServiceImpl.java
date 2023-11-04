@@ -24,10 +24,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -73,30 +70,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         return this.usuarioMapper.toBaseDTO(user.get());
     }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        Usuario usuario = this.usuarioRepository.findByEmail(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("No se encontro al usuario con el email " + username));
-//
-//        UsuarioDTO usuarioDTO = this.usuarioMapper.toDTO(usuario);
-//
-//        UserDetailsImpl userDetails = new UserDetailsImpl(usuarioDTO);
-//
-//        return userDetails;
-//    }
-//
-//    @Override
-//    public UsuarioDTO getUserInfo(String username) {
-//        Usuario usuario = this.usuarioRepository.findByEmail(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("No se encontro al usuario con el email " + username));
-//
-//        return UsuarioDTO.builder()
-//                .id(usuario.getId())
-//                .email(usuario.getEmail())
-//                .build();
-//
-//    }
 
     @Override
     public WrapperData findAll(int page, int size, String search, String orderBy, String orientation) {
@@ -177,6 +150,27 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         } catch (Exception e) {
             log.error("Ocurrio un error al intentar actualizar password para el usuario {}. Excepcion: {} ", userId, e.getLocalizedMessage());
+            throw MunicipalidadMQRuntimeException.conflictException(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void changeStatus(Long userId, Integer status) {
+        try {
+            Optional<Usuario> user = this.usuarioRepository.findById(userId);
+
+            if (user.isEmpty()) {
+                throw MunicipalidadMQRuntimeException.conflictException("No se encontro usuario");
+            }
+
+            if (Objects.equals(user.get().getEstado(), status)) {
+                throw MunicipalidadMQRuntimeException.conflictException("No se puede actualizar al mismo estado.");
+            }
+
+            this.usuarioRepository.changeStatus(userId, status);
+
+        }catch (Exception e){
+            log.error("Ocurrio un error al intentar actualizar estado al usuario {}. Excepcion: {}", userId,e.getLocalizedMessage());
             throw MunicipalidadMQRuntimeException.conflictException(e.getLocalizedMessage());
         }
     }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/usuarios")
-@Api(tags= {SwaggerTags.USUARIOS_TAG})
+@Api(tags = {SwaggerTags.USUARIOS_TAG})
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class UsuarioController {
 
@@ -27,13 +27,13 @@ public class UsuarioController {
     @PostMapping(value = "/user-info")
     public ResponseEntity<Object> getUserInfo(@RequestBody UsuarioDTO usuario) {
         UsuarioBaseDTO user = this.usuarioService.getUserInfo(usuario.getEmail());
-        return new ResponseEntity(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody UsuarioDTO usuario) {
         this.usuarioService.create(usuario);
-        return new ResponseEntity("OK", HttpStatus.CREATED);
+        return new ResponseEntity<>("OK", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -47,8 +47,14 @@ public class UsuarioController {
     }
 
     @PutMapping(value = "/cambiar-password")
-    public ResponseEntity<Object> changePassword(@RequestBody UsuarioDTO user){
+    public ResponseEntity<Object> changePassword(@RequestBody UsuarioDTO user) {
         this.usuarioService.changePassword(user.getId(), user.getPassword());
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/cambiar-estado")
+    public ResponseEntity<Object> changeStatus(@RequestBody UsuarioDTO user) {
+        this.usuarioService.changeStatus(user.getId(), user.getEstado());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 }

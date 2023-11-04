@@ -37,6 +37,10 @@ public class LoginServiceImpl implements LoginService {
                 throw MunicipalidadMQRuntimeException.conflictException("Debe cambiar su contraseña.");
             }
 
+            if (usuario.getEstado().equals(0)){
+                throw MunicipalidadMQRuntimeException.conflictException("Usuario inactivo.");
+            }
+
             return  "Bearer "+ TokenUtils.create(usuario.getId(), usuario.getEmail());
 
         } catch (Exception e) {
