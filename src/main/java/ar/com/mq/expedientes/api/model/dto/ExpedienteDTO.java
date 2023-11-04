@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +22,7 @@ public class ExpedienteDTO extends MunicipalidadMQDTO {
 
     private String referencia;
 
-    private LocalDateTime fechaCaratulacion;
+    private LocalDate fechaCaratulacion;
 
     private String descripcion;
 
@@ -35,4 +37,6 @@ public class ExpedienteDTO extends MunicipalidadMQDTO {
     private String estado;
 
     private LocalDateTime ultimaActualizacion;
+
+    private List<DocumentoDTO> documentos;
 }

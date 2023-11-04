@@ -10,6 +10,9 @@ public enum TipoExpedienteEnum {
     PAGO,
     PERSONAL,
     SERVICIO,
+    VIATICOS,
+    HORASEXTRAS,
+    LICENCIAS,
     SUBSIDIO;
 
     public static boolean in (String tipoExpediente, List<TipoExpedienteEnum> entidades){

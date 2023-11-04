@@ -9,6 +9,7 @@ import ar.com.mq.expedientes.api.model.mapper.interfaces.AreaMapper;
 import ar.com.mq.expedientes.api.service.interfaces.AreaService;
 import ar.com.mq.expedientes.api.service.repository.AreaRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,10 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,6 @@ public class AreaServiceImpl implements AreaService {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         Page<Area> areaPage = areaRepository.findAll(new Specification<Area>() {
-
             @Override
             public Predicate toPredicate(Root<Area> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>();
@@ -59,7 +57,6 @@ public class AreaServiceImpl implements AreaService {
                                     .lower(root.get("descripcion")), "%" + search.toLowerCase() + "%"))
                     );
                 }
-
 
                 // Ordenamos
                 if (StringUtils.isNotBlank(orderBy) && StringUtils.isNotBlank(orientation)) {

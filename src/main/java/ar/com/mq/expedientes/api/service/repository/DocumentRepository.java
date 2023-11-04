@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Documento, Long>, JpaSpecificationExecutor<Documento> {
+
+    Documento findByNombre (String nombre);
 }

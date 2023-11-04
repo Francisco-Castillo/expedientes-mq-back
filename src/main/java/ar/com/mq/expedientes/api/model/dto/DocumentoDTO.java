@@ -21,7 +21,13 @@ public class DocumentoDTO {
 
     private String observaciones;
 
+    private String nombre;
+
+    private String tipoArchivo;
+
     private Long tipoDocumentoId;
 
     private Long expedienteId;
+
+    private String url;
 }

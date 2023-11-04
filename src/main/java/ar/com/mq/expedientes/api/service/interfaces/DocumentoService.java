@@ -7,4 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 public interface DocumentoService {
 
     void save(HttpServletRequest request, String data);
+
+    DocumentoDTO findByName(String name);
 }

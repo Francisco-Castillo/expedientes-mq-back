@@ -7,6 +7,7 @@ import ar.com.mq.expedientes.api.service.interfaces.ParametroService;
 import ar.com.mq.expedientes.api.service.repository.ParametroRepository;
 import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,9 @@ public class ParametroServiceImpl implements ParametroService {
     @Override
     public String getDirectorioDeAlmacenamiento() {
         try {
-            return this.parametroRepository.getValor(ParametroEnum.DIRECTORIO_DE_ALMACENAMIENTO.getValue());
+            String parameter =  this.parametroRepository.getValor(ParametroEnum.DIRECTORIO_DE_ALMACENAMIENTO.getValue());
+            if (StringUtils.isBlank(parameter)) throw MunicipalidadMQRuntimeException.notFoundException("No se encontro parametro "+ParametroEnum.DIRECTORIO_DE_ALMACENAMIENTO);
+            return parameter;
         } catch (Exception e) {
             log.error("No se encontro parametro {}", ParametroEnum.DIRECTORIO_DE_ALMACENAMIENTO.getValue());
             throw MunicipalidadMQRuntimeException.notFoundException("No se encontro parametro");

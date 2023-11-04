@@ -13,6 +13,7 @@ import ar.com.mq.expedientes.core.utils.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,9 +59,13 @@ public class DocumentoServiceImpl implements DocumentoService {
 
                 var directorioDeAlmacenamiento = this.parametroService.getDirectorioDeAlmacenamiento();
 
-                ExpedienteDTO expediente = this.expedienteService.findById(documento.getExpedienteId());
-                String ubicacion = directorioDeAlmacenamiento + "/"+ expediente.getNumero() + "/" + files.get(0).getOriginalFilename();
+                ExpedienteDTO expediente = this.expedienteService.findById(documento.getExpedienteId(), false);
+
+                String ubicacion = directorioDeAlmacenamiento + "/"+ expediente.getNumero() + "/";
                 documento.setUbicacion(ubicacion);
+                documento.setNombre(files.get(0).getOriginalFilename());
+                documento.setTipoArchivo(files.get(0).getContentType());
+
                 Documento entity = this.documentoMapper.toEntity(documento);
 
                 this.documentRepository.save(entity);
@@ -76,5 +81,14 @@ public class DocumentoServiceImpl implements DocumentoService {
         }
 
 
+    }
+
+    @Override
+    public DocumentoDTO findByName(String name) {
+        Documento document = this.documentRepository.findByNombre(name);
+        if (ObjectUtils.isEmpty(document)){
+            throw MunicipalidadMQRuntimeException.notFoundException("No se encontro documento");
+        }
+        return this.documentoMapper.toDTO(document);
     }
 }

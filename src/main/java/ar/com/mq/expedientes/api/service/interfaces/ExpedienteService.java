@@ -1,22 +1,36 @@
 package ar.com.mq.expedientes.api.service.interfaces;
 
 import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
-import ar.com.mq.expedientes.api.model.dto.ExpedientePagoDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
+import ar.com.mq.expedientes.api.model.entity.Expediente;
 
-import java.util.Optional;
+import java.time.LocalDate;
 
 public interface ExpedienteService {
 
-    void save(ExpedientePagoDTO expediente);
+    void save(ExpedienteDTO expediente);
 
     void deleteById(Long id);
 
     void update(Long id,ExpedienteDTO expediente);
 
-    WrapperData findAll(int page, int size, String search, String orderBy, String orientation);
+    WrapperData findAll(Integer page,
+                        Integer size,
+                        LocalDate startDate,
+                        LocalDate endDate,
+                        String identificator,
+                        String number,
+                        String reference,
+                        String description,
+                        String status,
+                        String universalFilter,
+                        boolean includeDocuments,
+                        String orderBy,
+                        String orientation);
 
-    ExpedienteDTO findById(Long id);
+    ExpedienteDTO findById(Long id, boolean includeDocument);
+
+    void updateStatus(Long id, String status);
 
 
 }

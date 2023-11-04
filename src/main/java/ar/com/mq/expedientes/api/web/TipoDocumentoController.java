@@ -1,9 +1,7 @@
 package ar.com.mq.expedientes.api.web;
 
-import ar.com.mq.expedientes.api.model.dto.ExpedientePagoDTO;
 import ar.com.mq.expedientes.api.model.dto.TipoDocumentoDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
-import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
 import ar.com.mq.expedientes.api.service.interfaces.TipoDocumentoService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;

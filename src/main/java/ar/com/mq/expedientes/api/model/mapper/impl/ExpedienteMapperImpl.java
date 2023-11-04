@@ -2,9 +2,11 @@ package ar.com.mq.expedientes.api.model.mapper.impl;
 
 import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
 import ar.com.mq.expedientes.api.model.entity.Expediente;
+import ar.com.mq.expedientes.api.model.mapper.interfaces.DocumentoMapper;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedienteMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +16,13 @@ import java.util.List;
 @Component
 public class ExpedienteMapperImpl implements ExpedienteMapper {
 
+    private final DocumentoMapper documentoMapper;
+
+    @Autowired
+    public ExpedienteMapperImpl(DocumentoMapper documentoMapper) {
+        this.documentoMapper = documentoMapper;
+    }
+
     @Override
     public Expediente toEntity(ExpedienteDTO dto) {
 
@@ -22,6 +31,7 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
         return Expediente.builder()
                 .id(dto.getId())
                 .numero(dto.getNumero())
+                .cantidadFojas(dto.getCantidadFojas())
                 .referencia(dto.getReferencia())
                 .fechaCaratulacion(dto.getFechaCaratulacion())
                 .descripcion(dto.getDescripcion())
@@ -38,12 +48,14 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
         return ExpedienteDTO.builder()
                 .id(entity.getId())
                 .numero(entity.getNumero())
+                .cantidadFojas(entity.getCantidadFojas())
                 .referencia(entity.getReferencia())
                 .fechaCaratulacion(entity.getFechaCaratulacion())
                 .descripcion(entity.getDescripcion())
                 .codigoTramite(entity.getCodigoTramite())
                 .tipo(entity.getTipo())
                 .estado(entity.getEstado())
+                .documentos(this.documentoMapper.toListDTO(entity.getDocumentos()))
                 .build();
     }
 
