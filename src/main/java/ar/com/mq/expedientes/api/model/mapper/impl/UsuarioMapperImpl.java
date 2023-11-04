@@ -68,6 +68,7 @@ public class UsuarioMapperImpl implements UsuarioMapper {
                 .build();
     }
 
+    @Override
     public UsuarioBaseDTO toBaseDTO(Usuario entity) {
         if (ObjectUtils.isEmpty(entity)) {
             return null;

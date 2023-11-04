@@ -1,5 +1,6 @@
 package ar.com.mq.expedientes.api.web;
 
+import ar.com.mq.expedientes.api.model.dto.UsuarioBaseDTO;
 import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.UsuarioService;
@@ -25,8 +26,8 @@ public class UsuarioController {
 
     @PostMapping(value = "/user-info")
     public ResponseEntity<Object> getUserInfo(@RequestBody UsuarioDTO usuario) {
-        UsuarioDTO userInfo = this.usuarioService.getUserInfo(usuario.getEmail());
-        return new ResponseEntity(userInfo, HttpStatus.OK);
+        UsuarioBaseDTO user = this.usuarioService.getUserInfo(usuario.getEmail());
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 
     @PostMapping

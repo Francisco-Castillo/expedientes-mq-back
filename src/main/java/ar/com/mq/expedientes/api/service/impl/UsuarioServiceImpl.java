@@ -63,8 +63,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public UsuarioDTO getUserInfo(String username) {
-        return null;
+    public UsuarioBaseDTO getUserInfo(String username) {
+
+        Optional<Usuario> user = this.usuarioRepository.findByEmail(username);
+
+        if (user.isEmpty()){
+            throw MunicipalidadMQRuntimeException.notFoundException("No se encontro usuario");
+        }
+
+        return this.usuarioMapper.toBaseDTO(user.get());
     }
 
 //    @Override

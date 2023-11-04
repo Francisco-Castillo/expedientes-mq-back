@@ -10,4 +10,6 @@ import java.util.List;
 public interface UsuarioMapper extends MunicipalidadMQMapper<Usuario, UsuarioDTO> {
 
     List<UsuarioBaseDTO> toListBaseDTO(List<Usuario> entities);
+
+    UsuarioBaseDTO toBaseDTO(Usuario entity);
 }
