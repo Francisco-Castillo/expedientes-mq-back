@@ -105,6 +105,19 @@
             <version>${hibernate-validator.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.woo</groupId>
+            <artifactId>htmltopdf</artifactId>
+            <version>1.0.5</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+
 
     </dependencies>
 

@@ -6,6 +6,7 @@ import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
 import ar.com.mq.expedientes.api.model.dto.StatusDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
+import ar.com.mq.expedientes.api.service.interfaces.TemplateService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,12 @@ import java.util.Collections;
 public class ExpedienteController {
 
     private final ExpedienteService expedienteService;
+    private final TemplateService templateService;
 
     @Autowired
-    public ExpedienteController(ExpedienteService expedienteService) {
+    public ExpedienteController(ExpedienteService expedienteService, TemplateService templateService) {
         this.expedienteService = expedienteService;
+        this.templateService = templateService;
     }
 
     @PostMapping(value = "/caratular")
@@ -73,6 +76,17 @@ public class ExpedienteController {
                                            @RequestParam(value = "includeDocuments", required = false, defaultValue = "false") boolean includeDocuments) {
         ExpedienteDTO expediente = this.expedienteService.findById(id, includeDocuments);
         return new ResponseEntity<>(expediente, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/caratula")
+    public ResponseEntity getCover(@PathVariable Long id){
+        try {
+            String coverPath = this.templateService.generateCover(id);
+            return this.templateService.obtenerArchivoADescargar(coverPath);
+        }catch (Exception e){
+            log.error("Ocurrio un error en controlador de expedientes al intentar obtener caratula. Expcecion: {}",e);
+            return new ResponseEntity<> ("Error al obtener caratula", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(value = "/tipos")
