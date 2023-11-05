@@ -87,7 +87,7 @@ public class TemplateServiceImpl implements TemplateService {
         try {
 
             //String fileName = PREFIX.concat(bookDTO.getIdentification()).concat(EXTENSION);
-            String fileName = "caratula-".concat(expediente.getNumero()).concat(".pdf");
+            String fileName = "caratula.".concat(expediente.getNumero()).concat(".pdf");
 
             File file = prepararDirectorioYFile(temporalPath, fileName);
 

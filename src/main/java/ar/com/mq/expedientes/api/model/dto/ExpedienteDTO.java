@@ -18,6 +18,8 @@ public class ExpedienteDTO extends MunicipalidadMQDTO {
 
     private Long id;
 
+    private String iniciador; // Entidad que inicia el expediente. No es lo mismo que el caratulador.
+
     private String numero;
 
     private String referencia;
@@ -39,4 +41,6 @@ public class ExpedienteDTO extends MunicipalidadMQDTO {
     private LocalDateTime ultimaActualizacion;
 
     private List<DocumentoDTO> documentos;
+
+    private UsuarioDTO usuario;
 }

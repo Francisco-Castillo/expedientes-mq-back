@@ -1,9 +1,12 @@
 package ar.com.mq.expedientes.api.model.mapper.impl;
 
 import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
+import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
 import ar.com.mq.expedientes.api.model.entity.Expediente;
+import ar.com.mq.expedientes.api.model.entity.Usuario;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.DocumentoMapper;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedienteMapper;
+import ar.com.mq.expedientes.api.model.mapper.interfaces.UsuarioMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +20,12 @@ import java.util.List;
 public class ExpedienteMapperImpl implements ExpedienteMapper {
 
     private final DocumentoMapper documentoMapper;
+    private final UsuarioMapper usuarioMapper;
 
     @Autowired
-    public ExpedienteMapperImpl(DocumentoMapper documentoMapper) {
+    public ExpedienteMapperImpl(DocumentoMapper documentoMapper, UsuarioMapper usuarioMapper) {
         this.documentoMapper = documentoMapper;
+        this.usuarioMapper = usuarioMapper;
     }
 
     @Override
@@ -30,6 +35,7 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
 
         return Expediente.builder()
                 .id(dto.getId())
+                .iniciador(dto.getIniciador())
                 .numero(dto.getNumero())
                 .cantidadFojas(dto.getCantidadFojas())
                 .referencia(dto.getReferencia())
@@ -38,15 +44,16 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
                 .codigoTramite(dto.getCodigoTramite())
                 .tipo(dto.getTipo())
                 .estado(dto.getEstado())
+                .usuario(Usuario.builder().id(dto.getUsuario().getId()).build())
                 .build();
     }
 
     @Override
     public ExpedienteDTO toDTO(Expediente entity) {
         if (ObjectUtils.isEmpty(entity)) return null;
-
         return ExpedienteDTO.builder()
                 .id(entity.getId())
+                .iniciador(entity.getIniciador())
                 .numero(entity.getNumero())
                 .cantidadFojas(entity.getCantidadFojas())
                 .referencia(entity.getReferencia())
@@ -56,6 +63,7 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
                 .tipo(entity.getTipo())
                 .estado(entity.getEstado())
                 .documentos(this.documentoMapper.toListDTO(entity.getDocumentos()))
+                .usuario(UsuarioDTO.builder().id(entity.getId()).build())
                 .build();
     }
 

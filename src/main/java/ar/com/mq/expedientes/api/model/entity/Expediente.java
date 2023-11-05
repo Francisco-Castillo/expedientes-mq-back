@@ -26,6 +26,8 @@ public class Expediente extends MunicipalidadMQEntity {
     @Column(name = "id")
     private Long id;
 
+    private String iniciador;
+
     private String numero;
 
     private String referencia;
@@ -57,6 +59,10 @@ public class Expediente extends MunicipalidadMQEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "expediente", orphanRemoval = true)
     private List<Pase> pases;
+
+    @ManyToOne
+    @JoinColumn(name = "usuariocaratulador_id")
+    private Usuario usuario;
 
     @Override
     public Serializable getPrimaryKey() {
