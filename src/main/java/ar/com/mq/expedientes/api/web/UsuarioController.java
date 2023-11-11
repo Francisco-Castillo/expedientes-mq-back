@@ -24,7 +24,7 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @PostMapping(value = "/user-info")
+    @GetMapping(value = "/user-info")
     public ResponseEntity<Object> getUserInfo(@RequestBody UsuarioDTO usuario) {
         UsuarioBaseDTO user = this.usuarioService.getUserInfo(usuario.getEmail());
         return new ResponseEntity<>(user, HttpStatus.OK);
