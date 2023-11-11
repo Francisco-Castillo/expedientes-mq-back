@@ -1,10 +1,10 @@
 package ar.com.mq.expedientes.api.service.impl;
 
 import ar.com.mq.expedientes.api.model.dto.LoginDTO;
+import ar.com.mq.expedientes.api.model.dto.TokenDataDTO;
 import ar.com.mq.expedientes.api.model.entity.Usuario;
 import ar.com.mq.expedientes.api.service.interfaces.LoginService;
 import ar.com.mq.expedientes.api.service.interfaces.UsuarioService;
-import ar.com.mq.expedientes.api.service.repository.UsuarioRepository;
 import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
 import ar.com.mq.expedientes.core.utils.PasswordUtils;
 import ar.com.mq.expedientes.core.utils.TokenUtils;
@@ -40,8 +40,12 @@ public class LoginServiceImpl implements LoginService {
             if (usuario.getEstado().equals(0)){
                 throw MunicipalidadMQRuntimeException.conflictException("Usuario inactivo.");
             }
+            
+			TokenDataDTO tokenData = TokenDataDTO.builder().userId(usuario.getId()).email(usuario.getEmail())
+					.name(usuario.getNombre()).lastName(usuario.getApellido()).areaId(usuario.getAreaId().getId())
+					.areaName(usuario.getAreaId().getDescripcion()).build();
 
-            return  "Bearer "+ TokenUtils.create(usuario.getId(), usuario.getEmail());
+            return  "Bearer "+ TokenUtils.create(tokenData);
 
         } catch (Exception e) {
             log.error("Ocurrio un error al intentar autenticar usuario. Excepcion: {}", e.getMessage());

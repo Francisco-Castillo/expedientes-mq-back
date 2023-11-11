@@ -9,11 +9,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import ar.com.mq.expedientes.api.model.dto.TokenDataDTO;
+
 public class TokenUtils {
 
     private final static String ACCESS_TOKEN_SECRET = "qCeFmqkwdnjgxcacsadqWWFCSAASDAsdasASD8789123";
 
-    public static String create(Long id, String email) {
+    public static String create(TokenDataDTO tokenData) {
 
         long minutosExpiracion = 60L;
 
@@ -22,11 +24,15 @@ public class TokenUtils {
         Date horaExpiracion = Date.from(periodoExpiracion.atZone(ZoneId.systemDefault()).toInstant());
 
         Map<String, Object> extra = new HashMap<>();
-        extra.put("userId", id);
-        extra.put("email", email);
-
+        extra.put("userId", tokenData.getUserId());
+        extra.put("email", tokenData.getEmail());
+        extra.put("name", tokenData.getName());
+        extra.put("lastName", tokenData.getLastName());
+        extra.put("areaId", tokenData.getAreaId());
+        extra.put("areaName", tokenData.getAreaName());
+        
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(tokenData.getEmail())
                 .signWith(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
                 .setIssuedAt(new Date())
                 .setExpiration(horaExpiracion)
