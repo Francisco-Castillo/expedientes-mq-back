@@ -93,6 +93,7 @@ public class ExpedienteServiceImpl implements ExpedienteService {
                                String reference,
                                String description,
                                String status,
+                               String caratulador,
                                String universalFilter,
                                boolean includeDocuments,
                                String orderBy,
@@ -156,13 +157,34 @@ public class ExpedienteServiceImpl implements ExpedienteService {
                     Predicate statusPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("estado")), "%" + status.toLowerCase() + "%");
                     predicates.add(statusPredicate);
                 }
+                
+                // Usuario caratulador.
+        		if (StringUtils.isNotBlank(caratulador)) {
+        			Expression<String> name = root.get("usuario").get("nombre").as(String.class);
+        			Expression<String> lastName = root.get("usuario").get("apellido").as(String.class);
+
+        			Predicate userNamePredicate = criteriaBuilder.like(criteriaBuilder.lower(name),
+        					"%" + caratulador.toLowerCase() + "%");
+        			Predicate userLastNamePredicate = criteriaBuilder.like(criteriaBuilder.lower(lastName),
+        					"%" + caratulador.toLowerCase() + "%");
+        			Predicate finalPredicate = criteriaBuilder.or(userNamePredicate, userLastNamePredicate);
+        			
+        			predicates.add(finalPredicate);
+        		}
+        		
+                // Area.
 
                 // Filtro universal.
                 if (StringUtils.isNotBlank(universalFilter)) {
                     Expression<String> id = root.get("id").as(String.class);
+                    Expression<String> name = root.get("usuario").get("nombre").as(String.class);
+        			Expression<String> lastName = root.get("usuario").get("apellido").as(String.class);
+        			
                     Predicate universalPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("numero")), "%" + universalFilter.toLowerCase() + "%");
 
                     universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(id, "%" + universalFilter.toLowerCase() + "%"));
+                    universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(name, "%" + universalFilter.toLowerCase() + "%"));
+                    universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(lastName, "%" + universalFilter.toLowerCase() + "%"));
                     universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(criteriaBuilder.lower(root.get("estado")), "%" + universalFilter.toLowerCase() + "%"));
                     universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(criteriaBuilder.lower(root.get("referencia")), "%" + universalFilter.toLowerCase() + "%"));
                     universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(criteriaBuilder.lower(root.get("descripcion")), "%" + universalFilter.toLowerCase() + "%"));

@@ -23,6 +23,7 @@ public interface ExpedienteService {
                         String reference,
                         String description,
                         String status,
+                        String caratulador,
                         String universalFilter,
                         boolean includeDocuments,
                         String orderBy,

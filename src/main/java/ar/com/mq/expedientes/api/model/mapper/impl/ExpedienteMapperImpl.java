@@ -63,7 +63,6 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
                 .tipo(entity.getTipo())
                 .estado(entity.getEstado())
                 .documentos(this.documentoMapper.toListDTO(entity.getDocumentos()))
-                .usuario(UsuarioDTO.builder().id(entity.getId()).build())
                 .build();
     }
 
