@@ -43,8 +43,9 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public WrapperData findAll(int page, int size, String search, String orderBy, String orientation) {
-        PageRequest pageRequest = PageRequest.of(page, size);
+    public List<AreaDTO> findAll(int page, int size, String search, String orderBy, String orientation) {
+        
+    	PageRequest pageRequest = PageRequest.of(page, size);
 
         Page<Area> areaPage = areaRepository.findAll(new Specification<Area>() {
             @Override
@@ -73,15 +74,6 @@ public class AreaServiceImpl implements AreaService {
 
         }, pageRequest);
 
-        List<AreaDTO> areas = this.areaMapper.toListDTO(areaPage.getContent());
-
-        WrapperData<AreaDTO> wrapperData = new WrapperData<>();
-
-        wrapperData.setItems(areas);
-        wrapperData.setTotalItems(areaPage.getTotalElements());
-        wrapperData.setTotalPages(areaPage.getTotalPages());
-        wrapperData.setCurrentPage(areaPage.getNumber());
-
-        return wrapperData;
+        return this.areaMapper.toListDTO(areaPage.getContent());
     }
 }

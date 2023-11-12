@@ -1,11 +1,13 @@
 package ar.com.mq.expedientes.api.service.impl;
 
-import ar.com.mq.expedientes.api.model.dto.TipoDocumentoDTO;
-import ar.com.mq.expedientes.api.model.dto.WrapperData;
-import ar.com.mq.expedientes.api.model.entity.TipoDocumento;
-import ar.com.mq.expedientes.api.model.mapper.interfaces.TipoDocumentoMapper;
-import ar.com.mq.expedientes.api.service.interfaces.TipoDocumentoService;
-import ar.com.mq.expedientes.api.service.repository.TipoDocumentoRepository;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,12 +15,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
+import ar.com.mq.expedientes.api.model.dto.TipoDocumentoDTO;
+import ar.com.mq.expedientes.api.model.entity.TipoDocumento;
+import ar.com.mq.expedientes.api.model.mapper.interfaces.TipoDocumentoMapper;
+import ar.com.mq.expedientes.api.service.interfaces.TipoDocumentoService;
+import ar.com.mq.expedientes.api.service.repository.TipoDocumentoRepository;
 
 @Service
 public class TipoDocumentoServiceImpl implements TipoDocumentoService {
@@ -39,7 +40,7 @@ public class TipoDocumentoServiceImpl implements TipoDocumentoService {
     }
 
     @Override
-    public WrapperData findAll(int page, int size, String search, String orderBy, String orientation) {
+    public List<TipoDocumentoDTO> findAll(int page, int size, String search, String orderBy, String orientation) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         Page<TipoDocumento> tipoDocumentoPage = tipoDocumentoRepository.findAll(new Specification<TipoDocumento>() {
@@ -67,15 +68,7 @@ public class TipoDocumentoServiceImpl implements TipoDocumentoService {
 
         }, pageRequest);
 
-        List<TipoDocumentoDTO> tipos = this.tipoDocumentoMapper.toListDTO(tipoDocumentoPage.getContent());
+        return this.tipoDocumentoMapper.toListDTO(tipoDocumentoPage.getContent());
 
-        WrapperData<TipoDocumentoDTO> wrapperData = new WrapperData<>();
-
-        wrapperData.setItems(tipos);
-        wrapperData.setTotalItems(tipoDocumentoPage.getTotalElements());
-        wrapperData.setTotalPages(tipoDocumentoPage.getTotalPages());
-        wrapperData.setCurrentPage(tipoDocumentoPage.getNumber());
-
-        return wrapperData;
     }
 }

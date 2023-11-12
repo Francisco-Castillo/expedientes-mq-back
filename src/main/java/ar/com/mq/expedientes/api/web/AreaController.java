@@ -1,7 +1,6 @@
 package ar.com.mq.expedientes.api.web;
 
 import ar.com.mq.expedientes.api.model.dto.AreaDTO;
-import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.AreaService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;
@@ -26,6 +25,7 @@ public class AreaController {
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody AreaDTO area) {
+    	log.debug("Por guardar area: {}", area);
         this.areaService.save(area);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -38,8 +38,6 @@ public class AreaController {
             @RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
             @RequestParam(value = "search", required = false, defaultValue = "") String search) {
 
-        WrapperData data = this.areaService.findAll(page, size, search, orderBy, orientation);
-
-        return new ResponseEntity<>(data, HttpStatus.OK);
+        return new ResponseEntity<>(this.areaService.findAll(page, size, search, orderBy, orientation), HttpStatus.OK);
     }
 }

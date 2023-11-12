@@ -1,7 +1,6 @@
 package ar.com.mq.expedientes.api.web;
 
 import ar.com.mq.expedientes.api.model.dto.TipoDocumentoDTO;
-import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.TipoDocumentoService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;
@@ -41,9 +40,7 @@ public class TipoDocumentoController {
             @RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
             @RequestParam(value = "search", required = false, defaultValue = "") String search) {
 
-        WrapperData data = this.tipoDocumentoService.findAll(page, size, search, orderBy, orientation);
-
-        return new ResponseEntity<>(data, HttpStatus.OK);
+        return new ResponseEntity<>(this.tipoDocumentoService.findAll(page, size, search, orderBy, orientation), HttpStatus.OK);
     }
 
 
