@@ -15,7 +15,7 @@ public interface UsuarioService {
 
     Usuario findByEmail(String email);
 
-    void changePassword(Long userId, String password);
+    void changePassword(String email, String password);
 
     void changeStatus (Long userId, Integer status);
 }

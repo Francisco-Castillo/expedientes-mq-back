@@ -130,26 +130,22 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public void changePassword(Long userId, String password) {
+    public void changePassword(String email, String password) {
         try {
-            Optional<Usuario> user = this.usuarioRepository.findById(userId);
+        	Usuario user = this.findByEmail(email);
 
-            if (user.isEmpty()) {
-                throw MunicipalidadMQRuntimeException.conflictException("No se encontro usuario");
-            }
-
-            if (user.get().getEstado() == 0) {
+            if (user.getEstado() == 0) {
                 throw MunicipalidadMQRuntimeException.conflictException("Usuario inactivo");
             }
 
-            if (user.get().getPassword().equals(PasswordUtils.encriptar(password))){
+            if (user.getPassword().equals(PasswordUtils.encriptar(password))){
                 throw MunicipalidadMQRuntimeException.badRequestException("La nueva contraseña debe ser diferente a la actual");
             }
 
-            this.usuarioRepository.changePassword(userId, PasswordUtils.encriptar(password));
+            this.usuarioRepository.changePassword(user.getId(), PasswordUtils.encriptar(password));
 
         } catch (Exception e) {
-            log.error("Ocurrio un error al intentar actualizar password para el usuario {}. Excepcion: {} ", userId, e.getLocalizedMessage());
+            log.error("Ocurrio un error al intentar actualizar password para el usuario {}. Excepcion: {} ", email, e.getLocalizedMessage());
             throw MunicipalidadMQRuntimeException.conflictException(e.getLocalizedMessage());
         }
     }

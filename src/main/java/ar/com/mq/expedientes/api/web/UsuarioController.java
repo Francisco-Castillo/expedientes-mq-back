@@ -48,7 +48,7 @@ public class UsuarioController {
 
     @PutMapping(value = "/cambiar-password")
     public ResponseEntity<Object> changePassword(@RequestBody UsuarioDTO user) {
-        this.usuarioService.changePassword(user.getId(), user.getPassword());
+        this.usuarioService.changePassword(user.getEmail(), user.getPassword());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
