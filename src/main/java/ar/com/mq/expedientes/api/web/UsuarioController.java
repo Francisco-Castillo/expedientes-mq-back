@@ -1,15 +1,24 @@
 package ar.com.mq.expedientes.api.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import ar.com.mq.expedientes.api.model.dto.UsuarioBaseDTO;
 import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.UsuarioService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/usuarios")
@@ -44,6 +53,12 @@ public class UsuarioController {
                                           @RequestParam(value = "search", required = false, defaultValue = "") String search) {
         WrapperData data = this.usuarioService.findAll(page, size, search, orderBy, orientation);
         return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+    
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody UsuarioBaseDTO user) {
+        UsuarioBaseDTO baseUser = this.usuarioService.update(id, user);
+        return new ResponseEntity<>(baseUser, HttpStatus.OK);
     }
 
     @PutMapping(value = "/cambiar-password")

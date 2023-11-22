@@ -18,4 +18,6 @@ public interface UsuarioService {
     void changePassword(String email, String password);
 
     void changeStatus (Long userId, Integer status);
+    
+    UsuarioBaseDTO update(Long id, UsuarioBaseDTO user);
 }

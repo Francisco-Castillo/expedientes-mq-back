@@ -170,4 +170,25 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw MunicipalidadMQRuntimeException.conflictException(e.getLocalizedMessage());
         }
     }
+
+	@Override
+	public UsuarioBaseDTO update(Long id, UsuarioBaseDTO user) {
+		
+		if (ObjectUtils.isEmpty(user) || StringUtils.isBlank(user.getApellido()) 
+				|| StringUtils.isBlank(user.getNombre()) || StringUtils.isBlank(user.getDocumento())) {
+			throw MunicipalidadMQRuntimeException.badRequestException("Complete todos los campos");
+		}
+		
+		Optional<Usuario> usuario = this.usuarioRepository.findById(id);
+		
+		if (usuario.isEmpty()) {
+			throw MunicipalidadMQRuntimeException.notFoundException("No se encontro usuario");
+		}
+		
+		usuario.get().setApellido(user.getApellido());
+		usuario.get().setNombre(user.getNombre());
+		usuario.get().setDni(user.getDocumento());
+		
+		return this.usuarioMapper.toBaseDTO(usuario.get());
+	}
 }
