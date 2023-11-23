@@ -58,8 +58,8 @@ public class ExpedienteServiceImpl implements ExpedienteService {
             throw  MunicipalidadMQRuntimeException.conflictException("Ya existe un expediente caratulado con el numero "+expedienteDTO.getNumero());
         }
 
-        if (expedienteDTO.getNumero().contains("/")) {
-            int middleDashPosition = expedienteDTO.getNumero().indexOf("/");
+        if (expedienteDTO.getNumero().contains("-")) {
+            int middleDashPosition = expedienteDTO.getNumero().indexOf("-");
             number = expedienteDTO.getNumero().substring(0, middleDashPosition);
         }
 
