@@ -3,9 +3,11 @@ package ar.com.mq.expedientes.api.web;
 import ar.com.mq.expedientes.api.enums.EstadoExpedienteEnum;
 import ar.com.mq.expedientes.api.enums.TipoExpedienteEnum;
 import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
+import ar.com.mq.expedientes.api.model.dto.PaseDTO;
 import ar.com.mq.expedientes.api.model.dto.StatusDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
+import ar.com.mq.expedientes.api.service.interfaces.PaseService;
 import ar.com.mq.expedientes.api.service.interfaces.TemplateService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 
 @RestController
 @RequestMapping(value = "/expedientes")
@@ -28,12 +29,14 @@ import java.util.Collections;
 public class ExpedienteController {
 
     private final ExpedienteService expedienteService;
+    private final PaseService paseService;
     private final TemplateService templateService;
 
     @Autowired
-    public ExpedienteController(ExpedienteService expedienteService, TemplateService templateService) {
+    public ExpedienteController(ExpedienteService expedienteService, TemplateService templateService, PaseService paseService) {
         this.expedienteService = expedienteService;
         this.templateService = templateService;
+        this.paseService = paseService;
     }
 
     @PostMapping(value = "/caratular")
@@ -42,6 +45,19 @@ public class ExpedienteController {
         this.expedienteService.save(expediente);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    
+	@PostMapping(value = "/{id}/pase")
+	public ResponseEntity<Object> save(@PathVariable Long id, @RequestBody PaseDTO pase) {
+		log.debug("Por registrar pase {}", pase);
+		PaseDTO paseDTO = this.paseService.save(pase);
+		return new ResponseEntity<>(paseDTO, HttpStatus.CREATED);
+	}
+	
+	@GetMapping(value = "/{id}/pases")
+	public ResponseEntity<Object> getPases(@PathVariable Long id) {
+		log.debug("Por obtener listados de pase {}", id);
+		return new ResponseEntity<>(this.paseService.findAllPases(id), HttpStatus.CREATED);
+	}
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody ExpedienteDTO expedienteDTO) {

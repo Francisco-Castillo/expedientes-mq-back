@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"}, callSuper = false)
 @Builder
+@ToString
 public class Pase extends MunicipalidadMQEntity {
 
     @Id
