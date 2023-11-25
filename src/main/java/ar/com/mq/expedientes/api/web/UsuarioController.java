@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/usuarios")
 @Api(tags = { SwaggerTags.USUARIOS_TAG })
-@CrossOrigin(origins = {"http://localhost:5173", "*","https://expedientes-mq-front-m0qsu3smm-francisco-castillos-projects.vercel.app"}, maxAge = 3600)
+@CrossOrigin(origins = "https://expedientes-mq-front-m0qsu3smm-francisco-castillos-projects.vercel.app", maxAge = 3600)
 @Slf4j
 public class UsuarioController {
 
