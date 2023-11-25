@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/tipos-documentos")
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:5173", "*"}, maxAge = 3600)
 @Slf4j
 @Api(tags= {SwaggerTags.TIPOS_DOCUMENTOS_TAG})
 public class TipoDocumentoController {

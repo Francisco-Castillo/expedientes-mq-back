@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/parametros")
 @Api(tags= {SwaggerTags.PARAMETROS_TAG})
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:5173", "*"}, maxAge = 3600)
 public class ParametroController {
 
     private final ParametroService parametroService;

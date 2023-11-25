@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 @RestController
 @RequestMapping(value = "/expedientes")
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:5173", "*"}, maxAge = 3600)
 @Slf4j
 @Api(tags = {SwaggerTags.EXPEDIENTES_TAG})
 public class ExpedienteController {
