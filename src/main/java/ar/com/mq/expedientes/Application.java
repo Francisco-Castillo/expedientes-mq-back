@@ -19,6 +19,7 @@ public class Application {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("https://expedientes-mq-front-n2aabfrry-francisco-castillos-projects.vercel.app"); // Reemplaza con tu dominio permitido
+        config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         source.registerCorsConfiguration("/**", config);
