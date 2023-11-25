@@ -1,5 +1,6 @@
 package ar.com.mq.expedientes.api.web;
 
+import org.hibernate.boot.model.relational.Loggable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,57 +20,61 @@ import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.service.interfaces.UsuarioService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(value = "/usuarios")
-@Api(tags = {SwaggerTags.USUARIOS_TAG})
+@Api(tags = { SwaggerTags.USUARIOS_TAG })
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@Slf4j
 public class UsuarioController {
 
-    private final UsuarioService usuarioService;
+	private final UsuarioService usuarioService;
 
-    @Autowired
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+	@Autowired
+	public UsuarioController(UsuarioService usuarioService) {
+		this.usuarioService = usuarioService;
+	}
 
-    @GetMapping(value = "/user-info")
-    public ResponseEntity<Object> getUserInfo(@RequestBody UsuarioDTO usuario) {
-        UsuarioBaseDTO user = this.usuarioService.getUserInfo(usuario.getEmail());
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
+	@GetMapping(value = "/user-info")
+	public ResponseEntity<Object> getUserInfo(
+			@RequestParam(value = "email", required = false, defaultValue = "") String email) {
+		log.debug("User info: {}", email);
+		UsuarioBaseDTO user = this.usuarioService.getUserInfo(email);
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
 
-    @PostMapping
-    public ResponseEntity<Object> create(@RequestBody UsuarioDTO usuario) {
-        this.usuarioService.create(usuario);
-        return new ResponseEntity<>("OK", HttpStatus.CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<Object> create(@RequestBody UsuarioDTO usuario) {
+		this.usuarioService.create(usuario);
+		return new ResponseEntity<>("OK", HttpStatus.CREATED);
+	}
 
-    @GetMapping
-    public ResponseEntity<Object> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
-                                          @RequestParam(value = "size", defaultValue = "10") int size,
-                                          @RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
-                                          @RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
-                                          @RequestParam(value = "search", required = false, defaultValue = "") String search) {
-        WrapperData data = this.usuarioService.findAll(page, size, search, orderBy, orientation);
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    }
-    
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody UsuarioBaseDTO user) {
-        UsuarioBaseDTO baseUser = this.usuarioService.update(id, user);
-        return new ResponseEntity<>(baseUser, HttpStatus.OK);
-    }
+	@GetMapping
+	public ResponseEntity<Object> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size,
+			@RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
+			@RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
+			@RequestParam(value = "search", required = false, defaultValue = "") String search) {
+		WrapperData data = this.usuarioService.findAll(page, size, search, orderBy, orientation);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
 
-    @PutMapping(value = "/cambiar-password")
-    public ResponseEntity<Object> changePassword(@RequestBody UsuarioDTO user) {
-        this.usuarioService.changePassword(user.getEmail(), user.getPassword());
-        return new ResponseEntity<>("OK", HttpStatus.OK);
-    }
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody UsuarioBaseDTO user) {
+		UsuarioBaseDTO baseUser = this.usuarioService.update(id, user);
+		return new ResponseEntity<>(baseUser, HttpStatus.OK);
+	}
 
-    @PutMapping(value = "/cambiar-estado")
-    public ResponseEntity<Object> changeStatus(@RequestBody UsuarioDTO user) {
-        this.usuarioService.changeStatus(user.getId(), user.getEstado());
-        return new ResponseEntity<>("OK", HttpStatus.OK);
-    }
+	@PutMapping(value = "/cambiar-password")
+	public ResponseEntity<Object> changePassword(@RequestBody UsuarioDTO user) {
+		this.usuarioService.changePassword(user.getEmail(), user.getPassword());
+		return new ResponseEntity<>("OK", HttpStatus.OK);
+	}
+
+	@PutMapping(value = "/cambiar-estado")
+	public ResponseEntity<Object> changeStatus(@RequestBody UsuarioDTO user) {
+		this.usuarioService.changeStatus(user.getId(), user.getEstado());
+		return new ResponseEntity<>("OK", HttpStatus.OK);
+	}
 }
