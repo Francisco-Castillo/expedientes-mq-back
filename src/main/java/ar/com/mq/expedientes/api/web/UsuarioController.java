@@ -53,10 +53,14 @@ public class UsuarioController {
 	@GetMapping
 	public ResponseEntity<Object> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "size", defaultValue = "10") int size,
+			@RequestParam(value = "nombre", required = false, defaultValue = "") String nombre,
+			@RequestParam(value = "apellido", required = false, defaultValue = "") String apellido,
+			@RequestParam(value = "dni", required = false, defaultValue = "") String dni,
+			@RequestParam(value = "email", required = false, defaultValue = "") String email,
 			@RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
 			@RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
-			@RequestParam(value = "search", required = false, defaultValue = "") String search) {
-		WrapperData data = this.usuarioService.findAll(page, size, search, orderBy, orientation);
+			@RequestParam(value = "universalFilter", required = false, defaultValue = "") String universalFilter) {
+		WrapperData data = this.usuarioService.findAll(page, size, apellido, nombre, dni, email, universalFilter, orderBy, orientation);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 

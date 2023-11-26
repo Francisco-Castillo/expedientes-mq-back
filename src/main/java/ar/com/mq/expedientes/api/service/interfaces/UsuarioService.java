@@ -11,7 +11,7 @@ public interface UsuarioService {
 
     UsuarioBaseDTO getUserInfo(String username);
 
-    WrapperData findAll(int page, int size, String search, String orderBy, String orientation);
+    WrapperData findAll(int page, int size, String apellido, String nombre, String dni, String email,  String universalFilter, String orderBy, String orientation);
 
     Usuario findByEmail(String email);
 

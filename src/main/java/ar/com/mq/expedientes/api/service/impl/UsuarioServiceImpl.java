@@ -3,6 +3,7 @@ package ar.com.mq.expedientes.api.service.impl;
 import ar.com.mq.expedientes.api.model.dto.UsuarioBaseDTO;
 import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
+import ar.com.mq.expedientes.api.model.entity.Expediente;
 import ar.com.mq.expedientes.api.model.entity.Usuario;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.UsuarioMapper;
 import ar.com.mq.expedientes.api.service.interfaces.UsuarioService;
@@ -72,34 +73,61 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public WrapperData findAll(int page, int size, String search, String orderBy, String orientation) {
+    public WrapperData findAll(int page, int size, String apellido, String nombre, String dni, String email,  String universalFilter, String orderBy, String orientation) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         Page<Usuario> usuarioPage = usuarioRepository.findAll(new Specification<Usuario>() {
 
             @Override
-            public Predicate toPredicate(Root<Usuario> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<Usuario> root, CriteriaQuery<?> cq, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
 
-                if (StringUtils.isNotBlank(search)) {
-                    predicates.add(cb.or(
-                            cb.like(cb
-                                    .lower(root.get("email")), "%" + search.toLowerCase() + "%"))
-                    );
+                // Apellido.
+                if (StringUtils.isNotBlank(apellido)) {
+                    Predicate numberPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("apellido")), "%" + apellido.toLowerCase() + "%");
+                    predicates.add(numberPredicate);
                 }
 
+                // Nombre.
+                if (StringUtils.isNotBlank(nombre)) {
+                    Predicate numberPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("nombre")), "%" + nombre.toLowerCase() + "%");
+                    predicates.add(numberPredicate);
+                }
+
+                // Dni.
+                if (StringUtils.isNotBlank(dni)) {
+                    Predicate numberPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("dni")), "%" + dni.toLowerCase() + "%");
+                    predicates.add(numberPredicate);
+                }
+                
+                // Email.
+                if (StringUtils.isNotBlank(email)) {
+                    Predicate numberPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("email")), "%" + email.toLowerCase() + "%");
+                    predicates.add(numberPredicate);
+                }
+
+                // Filtro universal.
+                if (StringUtils.isNotBlank(universalFilter)) {
+        			
+                    Predicate universalPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("nombre")), "%" + universalFilter.toLowerCase() + "%");
+                    universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(criteriaBuilder.lower(root.get("apellido")), "%" + universalFilter.toLowerCase() + "%"));
+                    universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(criteriaBuilder.lower(root.get("dni")), "%" + universalFilter.toLowerCase() + "%"));
+                    universalPredicate = criteriaBuilder.or(universalPredicate, criteriaBuilder.like(criteriaBuilder.lower(root.get("email")), "%" + universalFilter.toLowerCase() + "%"));
+
+                    predicates.add(universalPredicate);
+                }
 
                 // Ordenamos
                 if (StringUtils.isNotBlank(orderBy) && StringUtils.isNotBlank(orientation)) {
 
                     cq.orderBy(orientation.equals("asc")
-                            ? cb.asc(root.get(orderBy))
-                            : cb.desc(root.get(orderBy)));
+                            ? criteriaBuilder.asc(root.get(orderBy))
+                            : criteriaBuilder.desc(root.get(orderBy)));
 
                 } else {
-                    cq.orderBy(cb.asc(root.get("email")));
+                    cq.orderBy(criteriaBuilder.asc(root.get("apellido")));
                 }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
 
         }, pageRequest);
