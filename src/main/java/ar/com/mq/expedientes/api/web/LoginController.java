@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/login")
-@CrossOrigin(origins = {"http://localhost:5173", "*", "https://expedientes-mq-front-n2aabfrry-francisco-castillos-projects.vercel.app", "https://expedientes-mq-front.vercel.app"}, maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:5173", "*", "https://expedientes-mq-front.vercel.app"}, maxAge = 3600)
 @Slf4j
 public class LoginController {
 
