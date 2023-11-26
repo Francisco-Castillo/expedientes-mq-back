@@ -75,7 +75,8 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         }
 
         return UsuarioBaseDTO.builder()
-                .email(entity.getEmail())
+                .id(entity.getId())
+        		.email(entity.getEmail())
                 .nombre(entity.getNombre())
                 .apellido(entity.getApellido())
                 .documento(entity.getDni())

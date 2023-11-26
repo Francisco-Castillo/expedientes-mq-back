@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UsuarioBaseDTO extends MunicipalidadMQDTO {
+	
+	private Long id;
 
     private String nombre;
 

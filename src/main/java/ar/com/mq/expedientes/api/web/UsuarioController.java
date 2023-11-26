@@ -1,6 +1,6 @@
 package ar.com.mq.expedientes.api.web;
 
-import org.hibernate.boot.model.relational.Loggable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
