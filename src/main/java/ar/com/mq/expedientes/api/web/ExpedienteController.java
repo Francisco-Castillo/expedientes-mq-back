@@ -78,12 +78,13 @@ public class ExpedienteController {
             @RequestParam(value = "description",required = false) String description,
             @RequestParam(value = "status",required = false) String status,
             @RequestParam(value = "caratulador",required = false) String caratulador,
+            @RequestParam(value = "caratuladorId",required = false) Long caratuladorId,
             @RequestParam(value = "universalFilter", required = false, defaultValue = "") String universalFilter,
             @RequestParam(value = "includeDocuments", required = false, defaultValue = "false") boolean includeDocuments,
             @RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
             @RequestParam(value = "orientation", required = false, defaultValue = "") String orientation) {
 
-        WrapperData data = this.expedienteService.findAll(page, size, startDate, endDate, identificator,number,reference,description,status,caratulador,universalFilter,includeDocuments,orderBy,orientation);
+        WrapperData data = this.expedienteService.findAll(page, size, startDate, endDate, identificator,number,reference,description,status,caratulador, caratuladorId, universalFilter,includeDocuments,orderBy,orientation);
 
         return new ResponseEntity<>(data, HttpStatus.OK);
     }

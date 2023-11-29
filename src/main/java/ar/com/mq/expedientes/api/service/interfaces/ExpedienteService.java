@@ -24,6 +24,7 @@ public interface ExpedienteService {
                         String description,
                         String status,
                         String caratulador,
+                        Long caratuladorId,
                         String universalFilter,
                         boolean includeDocuments,
                         String orderBy,

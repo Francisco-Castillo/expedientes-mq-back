@@ -94,6 +94,7 @@ public class ExpedienteServiceImpl implements ExpedienteService {
                                String description,
                                String status,
                                String caratulador,
+                               Long caratuladorId,
                                String universalFilter,
                                boolean includeDocuments,
                                String orderBy,
@@ -172,7 +173,13 @@ public class ExpedienteServiceImpl implements ExpedienteService {
         			predicates.add(finalPredicate);
         		}
         		
-                // Area.
+        		// Identificador de usuario caratulador
+        		
+        		if (ObjectUtils.isNotEmpty(caratuladorId)) {
+        			Predicate caratuladorIdPredicate = criteriaBuilder.equal(root.get("usuario").get("id"), caratuladorId);
+        			predicates.add(caratuladorIdPredicate);
+				}
+        		
 
                 // Filtro universal.
                 if (StringUtils.isNotBlank(universalFilter)) {

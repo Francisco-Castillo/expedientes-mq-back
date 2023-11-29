@@ -63,7 +63,14 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
                 .tipo(entity.getTipo())
                 .estado(entity.getEstado())
                 .documentos(this.documentoMapper.toListDTO(entity.getDocumentos()))
+                .usuario(UsuarioDTO.builder()
+                		.id(entity.getUsuario().getId())
+                		.apellido(entity.getUsuario().getApellido())
+                		.nombre(entity.getUsuario().getNombre())
+                		.build())
                 .build();
+        
+        // TODO: Quitar campos extras.
     }
 
     @Override
