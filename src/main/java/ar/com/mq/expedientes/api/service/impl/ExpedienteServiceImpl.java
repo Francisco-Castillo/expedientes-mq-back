@@ -5,11 +5,13 @@ import ar.com.mq.expedientes.api.model.dto.DocumentoDTO;
 import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
 import ar.com.mq.expedientes.api.model.dto.WrapperData;
 import ar.com.mq.expedientes.api.model.entity.Expediente;
+import ar.com.mq.expedientes.api.model.entity.Pase;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.DocumentoMapper;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedienteMapper;
 import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
 import ar.com.mq.expedientes.api.service.interfaces.ParametroService;
 import ar.com.mq.expedientes.api.service.repository.ExpedienteRepository;
+import ar.com.mq.expedientes.api.service.repository.PaseRepository;
 import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -27,12 +29,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class ExpedienteServiceImpl implements ExpedienteService {
 
     private final ExpedienteRepository expedienteRepository;
+    private final PaseRepository paseRepository;
     private final ExpedienteMapper expedienteMapper;
     private final DocumentoMapper documentoMapper;
     private final ParametroService parametroService;
@@ -42,11 +46,14 @@ public class ExpedienteServiceImpl implements ExpedienteService {
 
     @Autowired
     public ExpedienteServiceImpl(ExpedienteRepository expedienteRepository, ExpedienteMapper expedienteMapper,
-                                 ParametroService parametroService, DocumentoMapper documentoMapper) {
+                                 ParametroService parametroService, 
+                                 DocumentoMapper documentoMapper,
+                                 PaseRepository paseRepository) {
         this.expedienteRepository = expedienteRepository;
         this.expedienteMapper = expedienteMapper;
         this.parametroService = parametroService;
         this.documentoMapper = documentoMapper;
+        this.paseRepository = paseRepository;
     }
 
     @Override
@@ -260,4 +267,38 @@ public class ExpedienteServiceImpl implements ExpedienteService {
     public void updateStatus(Long id, String status) {
         this.expedienteRepository.updateStatus(id, status);
     }
+
+	@Override
+	public List<ExpedienteDTO> buscarTodosMisExpedientes(Long usuarioReceptorId) {
+		PageRequest pageRequest = PageRequest.of(0, 1000);
+
+		Page<Pase> expedientePage = paseRepository.findAll(new Specification<Pase>() {
+
+			@Override
+			public Predicate toPredicate(Root<Pase> root, CriteriaQuery<?> cq, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> predicates = new ArrayList<>();
+
+				// StartDate.
+				if (ObjectUtils.isNotEmpty(usuarioReceptorId)) {
+					Predicate startDatePredicate = criteriaBuilder.equal(root.get("usuarioReceptor").get("id"),
+							usuarioReceptorId);
+					predicates.add(startDatePredicate);
+				}
+
+				cq.orderBy(criteriaBuilder.asc(root.get("id")));
+
+				return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+			}
+
+		}, pageRequest);
+
+		List<Pase> pases = expedientePage.getContent();
+
+		List<Expediente> lista = pases.stream().map(item -> {
+			return item.getExpediente();
+		}).collect(Collectors.toList());
+
+		return this.expedienteMapper.toListDTO(lista);
+
+	}
 }

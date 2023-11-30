@@ -56,7 +56,7 @@ public class ExpedienteController {
 	@GetMapping(value = "/{id}/pases")
 	public ResponseEntity<Object> getPases(@PathVariable Long id) {
 		log.debug("Por obtener listados de pase {}", id);
-		return new ResponseEntity<>(this.paseService.findAllPases(id), HttpStatus.CREATED);
+		return new ResponseEntity<>(this.paseService.findAllPases(id), HttpStatus.OK);
 	}
 
     @PutMapping(value = "/{id}")
@@ -122,5 +122,10 @@ public class ExpedienteController {
         this.expedienteService.updateStatus(id, status.getStatus());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
+    
+		@GetMapping(value = "/bandeja-entrada/{usuarioReceptorId}")
+		public ResponseEntity<Object> misExpedientes(@PathVariable Long usuarioReceptorId) {
+			return new ResponseEntity<>(this.expedienteService.buscarTodosMisExpedientes(usuarioReceptorId), HttpStatus.OK);
+		}
 
 }
