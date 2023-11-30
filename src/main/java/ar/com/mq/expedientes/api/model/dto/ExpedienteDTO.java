@@ -43,4 +43,6 @@ public class ExpedienteDTO extends MunicipalidadMQDTO {
     private List<DocumentoDTO> documentos;
 
     private UsuarioDTO usuario;
+    
+    private UsuarioBaseDTO usuarioEmisor;
 }

@@ -1,19 +1,16 @@
 package ar.com.mq.expedientes.api.service.impl;
 
-import ar.com.mq.expedientes.api.enums.ParametroEnum;
-import ar.com.mq.expedientes.api.model.dto.DocumentoDTO;
-import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
-import ar.com.mq.expedientes.api.model.dto.WrapperData;
-import ar.com.mq.expedientes.api.model.entity.Expediente;
-import ar.com.mq.expedientes.api.model.entity.Pase;
-import ar.com.mq.expedientes.api.model.mapper.interfaces.DocumentoMapper;
-import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedienteMapper;
-import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
-import ar.com.mq.expedientes.api.service.interfaces.ParametroService;
-import ar.com.mq.expedientes.api.service.repository.ExpedienteRepository;
-import ar.com.mq.expedientes.api.service.repository.PaseRepository;
-import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,12 +21,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import ar.com.mq.expedientes.api.enums.ParametroEnum;
+import ar.com.mq.expedientes.api.model.dto.DocumentoDTO;
+import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
+import ar.com.mq.expedientes.api.model.dto.UsuarioBaseDTO;
+import ar.com.mq.expedientes.api.model.dto.UsuarioDTO;
+import ar.com.mq.expedientes.api.model.dto.WrapperData;
+import ar.com.mq.expedientes.api.model.entity.Documento;
+import ar.com.mq.expedientes.api.model.entity.Expediente;
+import ar.com.mq.expedientes.api.model.entity.Pase;
+import ar.com.mq.expedientes.api.model.mapper.interfaces.DocumentoMapper;
+import ar.com.mq.expedientes.api.model.mapper.interfaces.ExpedienteMapper;
+import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
+import ar.com.mq.expedientes.api.service.interfaces.ParametroService;
+import ar.com.mq.expedientes.api.service.repository.ExpedienteRepository;
+import ar.com.mq.expedientes.api.service.repository.PaseRepository;
+import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -293,12 +301,62 @@ public class ExpedienteServiceImpl implements ExpedienteService {
 		}, pageRequest);
 
 		List<Pase> pases = expedientePage.getContent();
+		
+		List<ExpedienteDTO> lista = new ArrayList<ExpedienteDTO>();
+		
+		for (Pase item : pases) {
+			lista.add(ExpedienteDTO.builder()
+					.id(item.getExpediente().getId())
+					.iniciador(item.getExpediente().getIniciador())
+					.numero(item.getExpediente().getNumero())
+					.referencia(item.getExpediente().getReferencia())
+					.fechaCaratulacion(item.getExpediente().getFechaCaratulacion())
+					.descripcion(item.getExpediente().getDescripcion())
+					.codigoTramite(item.getExpediente().getCodigoTramite())
+					.tipo(item.getExpediente().getTipo())
+					.cantidadFojas(item.getExpediente().getCantidadFojas())
+					.monto(item.getExpediente().getMonto())
+					.estado(item.getExpediente().getEstado())
+					.ultimaActualizacion(item.getExpediente().getUltimaActualizacion())
+					.usuario(UsuarioDTO.builder()
+							.id(item.getUsuarioReceptor().getId())
+							.nombre(item.getUsuarioReceptor().getNombre())
+							.apellido(item.getUsuarioReceptor().getApellido())
+							.build())
+					.usuarioEmisor(UsuarioBaseDTO.builder()
+							.id(item.getUsuarioEmisor().getId())
+							.nombre(item.getUsuarioEmisor().getNombre())
+							.apellido(item.getUsuarioEmisor().getApellido())
+							.build())
+					.build());
+		}
+		
+		// Agregar documentos
+		
+		
+		for (ExpedienteDTO expedienteDTO : lista) {
+			List<DocumentoDTO> documentos = new ArrayList<DocumentoDTO>();
+			for (Pase item : pases) {
+				if (expedienteDTO.getId().equals(item.getExpediente().getId())) {
+					for (Documento docs : item.getExpediente().getDocumentos()) {
+						DocumentoDTO documento = new DocumentoDTO();
+						documento.setId(docs.getId());
+						documento.setFechaSubida(docs.getFechaSubida());
+						documento.setUbicacion(docs.getUbicacion());
+						documento.setNombre(docs.getNombre());
+						documento.setTipoArchivo(docs.getTipoArchivo());
+						
+						documento.setExpedienteId(docs.getExpediente().getId());
+						
+						documentos.add(documento);
+					}
+				}
+			}
+			expedienteDTO.setDocumentos(documentos);
+		}
 
-		List<Expediente> lista = pases.stream().map(item -> {
-			return item.getExpediente();
-		}).collect(Collectors.toList());
-
-		return this.expedienteMapper.toListDTO(lista);
+		return lista;
+	
 
 	}
 }
