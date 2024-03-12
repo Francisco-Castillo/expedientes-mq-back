@@ -85,6 +85,7 @@ public class ExpedienteController {
 			@RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
 			@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
 			@RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+			@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "identificator", required = false) String identificator,
 			@RequestParam(value = "number", required = false) String number,
 			@RequestParam(value = "reference", required = false) String reference,
@@ -97,7 +98,7 @@ public class ExpedienteController {
 			@RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
 			@RequestParam(value = "orientation", required = false, defaultValue = "") String orientation) {
 
-		WrapperData data = this.expedienteService.findAll(page, size, startDate, endDate, identificator, number,
+		WrapperData data = this.expedienteService.findAll(page, size, startDate, endDate, type, identificator, number,
 				reference, description, status, caratulador, caratuladorId, universalFilter, includeDocuments, orderBy,
 				orientation);
 

@@ -14,9 +14,10 @@ public interface ExpedienteService {
 
 	void update(Long id, ExpedienteDTO expediente);
 
-	WrapperData findAll(Integer page, Integer size, LocalDate startDate, LocalDate endDate, String identificator,
-			String number, String reference, String description, String status, String caratulador, Long caratuladorId,
-			String universalFilter, boolean includeDocuments, String orderBy, String orientation);
+	WrapperData findAll(Integer page, Integer size, LocalDate startDate, LocalDate endDate, String type,
+			String identificator, String number, String reference, String description, String status,
+			String caratulador, Long caratuladorId, String universalFilter, boolean includeDocuments, String orderBy,
+			String orientation);
 
 	ExpedienteDTO findById(Long id, boolean includeDocument);
 
