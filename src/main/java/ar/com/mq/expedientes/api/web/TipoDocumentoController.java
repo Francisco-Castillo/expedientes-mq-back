@@ -1,47 +1,54 @@
 package ar.com.mq.expedientes.api.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import ar.com.mq.expedientes.api.model.dto.TipoDocumentoDTO;
 import ar.com.mq.expedientes.api.service.interfaces.TipoDocumentoService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/tipos-documentos")
-@CrossOrigin(origins = {"http://localhost:5173", "*"}, maxAge = 3600)
+//@CrossOrigin(origins = {"http://localhost:5173", "*"}, maxAge = 3600)
+@CrossOrigin(origins = { "http://vps-4020997-x.dattaweb.com", "*" }, maxAge = 3600)
+
 @Slf4j
-@Api(tags= {SwaggerTags.TIPOS_DOCUMENTOS_TAG})
+@Api(tags = { SwaggerTags.TIPOS_DOCUMENTOS_TAG })
 public class TipoDocumentoController {
 
-    private final TipoDocumentoService tipoDocumentoService;
+	private final TipoDocumentoService tipoDocumentoService;
 
-    @Autowired
-    public TipoDocumentoController(TipoDocumentoService tipoDocumentoService) {
-        this.tipoDocumentoService = tipoDocumentoService;
-    }
+	@Autowired
+	public TipoDocumentoController(TipoDocumentoService tipoDocumentoService) {
+		this.tipoDocumentoService = tipoDocumentoService;
+	}
 
+	@PostMapping
+	public ResponseEntity<Object> save(@RequestBody TipoDocumentoDTO tipoDocumento) {
+		log.debug("Por guardar tipo de documento {}", tipoDocumento);
+		this.tipoDocumentoService.save(tipoDocumento);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
 
-    @PostMapping
-    public ResponseEntity<Object> save(@RequestBody TipoDocumentoDTO tipoDocumento) {
-        log.debug("Por guardar tipo de documento {}", tipoDocumento);
-        this.tipoDocumentoService.save(tipoDocumento);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+	@GetMapping
+	public ResponseEntity<Object> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size,
+			@RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
+			@RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
+			@RequestParam(value = "search", required = false, defaultValue = "") String search) {
 
-    @GetMapping
-    public ResponseEntity<Object> findAll(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
-            @RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
-            @RequestParam(value = "search", required = false, defaultValue = "") String search) {
-
-        return new ResponseEntity<>(this.tipoDocumentoService.findAll(page, size, search, orderBy, orientation), HttpStatus.OK);
-    }
-
+		return new ResponseEntity<>(this.tipoDocumentoService.findAll(page, size, search, orderBy, orientation),
+				HttpStatus.OK);
+	}
 
 }
