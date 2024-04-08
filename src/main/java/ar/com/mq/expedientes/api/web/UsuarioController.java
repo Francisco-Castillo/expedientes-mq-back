@@ -1,6 +1,5 @@
 package ar.com.mq.expedientes.api.web;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/usuarios")
 @Api(tags = { SwaggerTags.USUARIOS_TAG })
-@CrossOrigin(origins = "https://expedientes-mq-front-m0qsu3smm-francisco-castillos-projects.vercel.app", maxAge = 3600)
+@CrossOrigin(origins = { "http://vps-4020997-x.dattaweb.com", "*" }, maxAge = 3600)
 @Slf4j
 public class UsuarioController {
 
@@ -60,7 +59,8 @@ public class UsuarioController {
 			@RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
 			@RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
 			@RequestParam(value = "universalFilter", required = false, defaultValue = "") String universalFilter) {
-		WrapperData data = this.usuarioService.findAll(page, size, apellido, nombre, dni, email, universalFilter, orderBy, orientation);
+		WrapperData data = this.usuarioService.findAll(page, size, apellido, nombre, dni, email, universalFilter,
+				orderBy, orientation);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 
