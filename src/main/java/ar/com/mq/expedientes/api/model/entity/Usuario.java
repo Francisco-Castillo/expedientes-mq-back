@@ -60,7 +60,7 @@ public class Usuario extends MunicipalidadMQEntity {
 	@Column(name = "fecha_baja")
 	private String fechaBaja;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "area_id")
 	private Area areaId;
 

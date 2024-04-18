@@ -1,5 +1,6 @@
 package ar.com.mq.expedientes.api.service.impl;
 
+import ar.com.mq.expedientes.api.model.dto.AreaDTO;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,20 @@ public class UsuarioServiceImpl implements UsuarioService {
 		usuarioDTO.setFechaAlta(LocalDateTime.now(ZonedUtils.ARGENTINA()));
 		usuarioDTO.setEstado(ACTIVO);
 		usuarioDTO.setPrimerLogin(NO);
+		
+		
+		
+		Optional<Area> area = areaRepository.findById(usuarioDTO.getArea().getId());
+		
+		if (area.isEmpty()) {
+				throw MunicipalidadMQRuntimeException.notFoundException("No se encontro area con el identificador pasado como parametro.");
+		}
+		
+		usuarioDTO.setArea(AreaDTO.builder()
+                        .id(area.get().getId())
+                        .build());
+		
+		
 		Usuario toEntity = this.usuarioMapper.toEntity(usuarioDTO);
 
 		this.usuarioRepository.save(toEntity);
