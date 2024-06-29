@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/tipos-documentos")
 //@CrossOrigin(origins = {"http://localhost:5173", "*"}, maxAge = 3600)
-@CrossOrigin(origins = { "http://vps-4020997-x.dattaweb.com", "*" }, maxAge = 3600)
+@CrossOrigin(origins = { "http://vps-4188220-x.dattaweb.com", "*" }, maxAge = 3600)
 
 @Slf4j
 @Api(tags = { SwaggerTags.TIPOS_DOCUMENTOS_TAG })

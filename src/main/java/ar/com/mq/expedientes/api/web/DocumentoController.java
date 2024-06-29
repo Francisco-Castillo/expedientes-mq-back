@@ -28,7 +28,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 
 //@CrossOrigin(origins = {"http://localhost:5173", "*"}, maxAge = 3600)
-@CrossOrigin(origins = { "http://vps-4020997-x.dattaweb.com", "*" }, maxAge = 3600)
+@CrossOrigin(origins = { "http://vps-4188220-x.dattaweb.com", "*" }, maxAge = 3600)
 
 @RequestMapping(value = "/documentos")
 @RestController

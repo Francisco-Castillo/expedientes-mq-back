@@ -18,7 +18,7 @@ import io.swagger.annotations.Api;
 @RequestMapping(value = "/authenticate")
 @Api(tags = { SwaggerTags.AUTENTICACION_TAG })
 //@CrossOrigin(origins = {"http://localhost:5173", "*"}, maxAge = 3600)
-@CrossOrigin(origins = { "http://vps-4020997-x.dattaweb.com", "*" }, maxAge = 3600)
+@CrossOrigin(origins = { "http://vps-4188220-x.dattaweb.com", "*" }, maxAge = 3600)
 public class AutenticacionController {
 
 	private final UsuarioService usuarioService;
