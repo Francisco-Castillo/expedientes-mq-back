@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CORSFilter implements Filter {
 
-	private final List<String> allowedOrigins = Arrays.asList("http://vps-4020997-x.dattaweb.com",
+	private final List<String> allowedOrigins = Arrays.asList("http://vps-4188220-x.dattaweb.com",
 			"http://localhost:5173");
 
 	@Override
@@ -31,8 +31,8 @@ public class CORSFilter implements Filter {
 		String origin = request.getHeader("Origin");
 
 		if (allowedOrigins.contains(origin)) {
-                        response.setHeader("Access-Control-Allow-Origin", origin);			
-                        response.setHeader("Access-Control-Allow-Credentials", "true");
+			response.setHeader("Access-Control-Allow-Origin", origin);
+			response.setHeader("Access-Control-Allow-Credentials", "true");
 			response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
 			response.setHeader("Access-Control-Max-Age", "3600");
 			response.setHeader("Access-Control-Allow-Headers",
