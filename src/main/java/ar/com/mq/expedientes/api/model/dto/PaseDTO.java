@@ -14,12 +14,13 @@ import lombok.ToString;
 @Builder
 @ToString
 public class PaseDTO {
-	
+
 	private Long id;
 	private LocalDateTime fechaHora;
 	private String observaciones;
 	private Long expedienteId;
 	private Long usuarioEmisorId;
 	private Long usuarioReceptorId;
+	private Integer enBandeja;
 
 }

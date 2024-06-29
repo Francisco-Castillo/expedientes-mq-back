@@ -16,6 +16,7 @@ public class TokenDataDTO {
 	private String name;
 	private String lastName;
 	private Long areaId;
+	private Long areaLevel;
 	private String areaName;
 
 }

@@ -13,22 +13,18 @@ import ar.com.mq.expedientes.api.model.entity.Usuario;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.PaseMapper;
 
 @Component
-public class PaseMapperImpl implements PaseMapper{
+public class PaseMapperImpl implements PaseMapper {
 
 	@Override
 	public Pase toEntity(PaseDTO dto) {
 		if (ObjectUtils.isEmpty(dto)) {
 			return null;
 		}
-		
-		return Pase.builder()
-				.id(dto.getId())
-				.expediente(Expediente.builder().id(dto.getExpedienteId()).build())
-				.fechaHora(dto.getFechaHora())
-				.usuarioEmisor(Usuario.builder().id(dto.getUsuarioEmisorId()).build())
+
+		return Pase.builder().id(dto.getId()).expediente(Expediente.builder().id(dto.getExpedienteId()).build())
+				.fechaHora(dto.getFechaHora()).usuarioEmisor(Usuario.builder().id(dto.getUsuarioEmisorId()).build())
 				.usuarioReceptor(Usuario.builder().id(dto.getUsuarioReceptorId()).build())
-				.observaciones(dto.getObservaciones())
-				.build();
+				.observaciones(dto.getObservaciones()).enBandeja(dto.getEnBandeja()).build();
 	}
 
 	@Override
@@ -36,15 +32,11 @@ public class PaseMapperImpl implements PaseMapper{
 		if (ObjectUtils.isEmpty(entity)) {
 			return null;
 		}
-		
-		return PaseDTO.builder()
-				.id(entity.getId())
-				.fechaHora(entity.getFechaHora())
-				.observaciones(entity.getObservaciones())
-				.expedienteId(entity.getExpediente().getId())
+
+		return PaseDTO.builder().id(entity.getId()).fechaHora(entity.getFechaHora())
+				.observaciones(entity.getObservaciones()).expedienteId(entity.getExpediente().getId())
 				.usuarioEmisorId(entity.getUsuarioEmisor().getId())
-				.usuarioReceptorId(entity.getUsuarioReceptor().getId())
-				.build();
+				.usuarioReceptorId(entity.getUsuarioReceptor().getId()).enBandeja(entity.getEnBandeja()).build();
 	}
 
 	@Override

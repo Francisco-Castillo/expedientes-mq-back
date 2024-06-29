@@ -92,8 +92,9 @@ public class ExpedienteServiceImpl implements ExpedienteService {
 	@Override
 	public void update(Long id, ExpedienteDTO expediente) {
 
-		if (!expedienteRepository.existsById(id))
+		if (!expedienteRepository.existsById(id)) {
 			throw MunicipalidadMQRuntimeException.notFoundException("No se encontro expediente");
+		}
 
 	}
 
@@ -296,8 +297,13 @@ public class ExpedienteServiceImpl implements ExpedienteService {
 				if (ObjectUtils.isNotEmpty(usuarioReceptorId)) {
 					Predicate startDatePredicate = criteriaBuilder.equal(root.get("usuarioReceptor").get("id"),
 							usuarioReceptorId);
+
 					predicates.add(startDatePredicate);
 				}
+
+				// Solo lo que esta en bandeja; en_bandeja=1
+				Predicate enBandejaPredicate = criteriaBuilder.equal(root.get("enBandeja"), 1);
+				predicates.add(enBandejaPredicate);
 
 				cq.orderBy(criteriaBuilder.asc(root.get("id")));
 

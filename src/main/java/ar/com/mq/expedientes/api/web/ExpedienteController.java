@@ -150,4 +150,9 @@ public class ExpedienteController {
 	public ResponseEntity<Object> findAllDocuments(@PathVariable Long id) {
 		return new ResponseEntity<Object>(this.documentoService.findAllByExpedienteId(id), HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/{id}/buscar-ultimo-pase")
+	public ResponseEntity<Object> buscarUltimoPase(@PathVariable Long id) {
+		return new ResponseEntity<Object>(this.paseService.buscarUltimoPaseDeExpediente(id), HttpStatus.OK);
+	}
 }
