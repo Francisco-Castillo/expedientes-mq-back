@@ -1,48 +1,49 @@
 package ar.com.mq.expedientes.api.model.dto;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import ar.com.mq.expedientes.core.business.bean.MunicipalidadMQDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @Builder
 public class ExpedienteDTO extends MunicipalidadMQDTO {
 
-    private Long id;
+	private Long id;
 
-    private String iniciador; // Entidad que inicia el expediente. No es lo mismo que el caratulador.
+	private String iniciador; // Entidad que inicia el expediente. No es lo mismo que el caratulador.
 
-    private String numero;
+	private String numero;
 
-    private String referencia;
+	private String referencia;
 
-    private LocalDate fechaCaratulacion;
+	private LocalDate fechaCaratulacion;
 
-    private String descripcion;
+	private String descripcion;
 
-    private String codigoTramite;
+	private String codigoTramite;
 
-    private String tipo;
+	private String tipo;
 
-    private int cantidadFojas;
+	private int cantidadFojas;
 
-    private BigDecimal monto;
+	private BigDecimal monto;
 
-    private String estado;
+	private String estado;
 
-    private LocalDateTime ultimaActualizacion;
+	private LocalDateTime ultimaActualizacion;
 
-    private List<DocumentoDTO> documentos;
+	private List<DocumentoDTO> documentos;
 
-    private UsuarioDTO usuario;
-    
-    private UsuarioBaseDTO usuarioEmisor;
+	private UsuarioDTO usuario;
+
+	private UsuarioBaseDTO usuarioEmisor;
+
+	private String responsable;
 }
