@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.mq.expedientes.api.enums.EstadoExpedienteEnum;
-import ar.com.mq.expedientes.api.enums.TipoExpedienteEnum;
 import ar.com.mq.expedientes.api.model.dto.ExpedienteDTO;
 import ar.com.mq.expedientes.api.model.dto.PaseDTO;
 import ar.com.mq.expedientes.api.model.dto.StatusDTO;
@@ -27,6 +26,7 @@ import ar.com.mq.expedientes.api.service.interfaces.DocumentoService;
 import ar.com.mq.expedientes.api.service.interfaces.ExpedienteService;
 import ar.com.mq.expedientes.api.service.interfaces.PaseService;
 import ar.com.mq.expedientes.api.service.interfaces.TemplateService;
+import ar.com.mq.expedientes.api.service.interfaces.TipoExpedienteService;
 import ar.com.mq.expedientes.core.constants.SwaggerTags;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -44,14 +44,16 @@ public class ExpedienteController {
 	private final PaseService paseService;
 	private final TemplateService templateService;
 	private final DocumentoService documentoService;
+	private final TipoExpedienteService tipoExpedienteService;
 
 	@Autowired
 	public ExpedienteController(ExpedienteService expedienteService, TemplateService templateService,
-			PaseService paseService, DocumentoService documentoService) {
+			PaseService paseService, DocumentoService documentoService, TipoExpedienteService tipoExpedienteService) {
 		this.expedienteService = expedienteService;
 		this.templateService = templateService;
 		this.paseService = paseService;
 		this.documentoService = documentoService;
+		this.tipoExpedienteService = tipoExpedienteService;
 	}
 
 	@PostMapping(value = "/caratular")
@@ -126,8 +128,14 @@ public class ExpedienteController {
 	}
 
 	@GetMapping(value = "/tipos")
-	public ResponseEntity<Object> findTypes() {
-		return new ResponseEntity<>(Arrays.asList(TipoExpedienteEnum.values()), HttpStatus.OK);
+	public ResponseEntity<Object> findTypes(@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "100") int size,
+			@RequestParam(value = "orderBy", required = false, defaultValue = "") String orderBy,
+			@RequestParam(value = "orientation", required = false, defaultValue = "") String orientation,
+			@RequestParam(value = "search", required = false, defaultValue = "") String search) {
+
+		return new ResponseEntity<>(this.tipoExpedienteService.findAll(page, size, search, orderBy, orientation),
+				HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/estados")
