@@ -14,12 +14,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.mq.expedientes.api.model.dto.TipoExpedienteDTO;
 import ar.com.mq.expedientes.api.model.entity.TipoExpediente;
 import ar.com.mq.expedientes.api.model.mapper.interfaces.TipoExpedienteMapper;
 import ar.com.mq.expedientes.api.service.interfaces.TipoExpedienteService;
 import ar.com.mq.expedientes.api.service.repository.TipoExpedienteRepository;
+import ar.com.mq.expedientes.core.exception.exceptions.MunicipalidadMQRuntimeException;
 
 @Service
 public class TipoExpedienteServiceImpl implements TipoExpedienteService {
@@ -63,6 +65,58 @@ public class TipoExpedienteServiceImpl implements TipoExpedienteService {
 		}, pageRequest);
 
 		return this.tipoExpedienteMapper.toListDTO(tipoDocumentoPage.getContent());
+	}
+
+	@Override
+	public TipoExpedienteDTO create(TipoExpedienteDTO expediente) {
+		if (expediente == null || expediente.getDescripcion().isBlank() || expediente.getDescripcion().isEmpty()) {
+			throw MunicipalidadMQRuntimeException.badRequestException("El campo descripción es obligatorio.");
+		}
+
+		var tipoExpediente = this.tipoExpedienteRepository.findByDescripcionIgnoreCase(expediente.getDescripcion());
+
+		if (tipoExpediente != null) {
+			throw MunicipalidadMQRuntimeException
+					.conflictException("Ya existe un tipo de expediente registrado con esa descripción");
+		}
+
+		var tipoExpedienteSaved = this.tipoExpedienteRepository.save(this.tipoExpedienteMapper.toEntity(expediente));
+
+		return tipoExpedienteMapper.toDTO(tipoExpedienteSaved);
+	}
+
+	@Override
+	public TipoExpediente findById(Integer expedienteId) {
+		return this.tipoExpedienteRepository.findById(expedienteId).orElseThrow(() -> MunicipalidadMQRuntimeException
+				.notFoundException("No se encontro tipo de expediente con el identificador pasado como parámetro."));
+	}
+
+	@Override
+	@Transactional
+	public TipoExpedienteDTO update(TipoExpedienteDTO expediente, Integer expedienteId) {
+		if (expedienteId == null) {
+			throw MunicipalidadMQRuntimeException.badRequestException("El identificador del expediente es obligatorio");
+		}
+
+		var tipoExpediente = findById(expedienteId);
+
+		tipoExpediente.setDescripcion(expediente.getDescripcion());
+
+		this.tipoExpedienteRepository.save(tipoExpediente);
+
+		return this.tipoExpedienteMapper.toDTO(tipoExpediente);
+
+	}
+
+	@Override
+	public void delete(Integer expedienteId) {
+		if (expedienteId == null) {
+			throw MunicipalidadMQRuntimeException.badRequestException("El identificador del expediente es obligatorio");
+		}
+
+		var tipoExpediente = findById(expedienteId);
+
+		this.tipoExpedienteRepository.delete(tipoExpediente);
 	}
 
 }

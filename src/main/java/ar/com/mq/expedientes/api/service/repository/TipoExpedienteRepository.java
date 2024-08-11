@@ -10,4 +10,6 @@ import ar.com.mq.expedientes.api.model.entity.TipoExpediente;
 public interface TipoExpedienteRepository
 		extends JpaRepository<TipoExpediente, Integer>, JpaSpecificationExecutor<TipoExpediente> {
 
+	TipoExpediente findByDescripcionIgnoreCase(String descripcion);
+
 }
