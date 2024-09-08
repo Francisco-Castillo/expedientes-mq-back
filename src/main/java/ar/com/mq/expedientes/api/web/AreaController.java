@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,5 +49,17 @@ public class AreaController {
 			@RequestParam(value = "search", required = false, defaultValue = "") String search) {
 
 		return new ResponseEntity<>(this.areaService.findAll(page, size, search, orderBy, orientation), HttpStatus.OK);
+	}
+
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Object> update(@RequestBody AreaDTO dto, @PathVariable Long id) {
+		AreaDTO area = this.areaService.update(dto, id);
+		return new ResponseEntity<>("Area actualizada exitosamente", HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Object> delete(@PathVariable Long id) {
+		this.areaService.delete(id);
+		return new ResponseEntity<>("Area eliminada exitosamente", HttpStatus.OK);
 	}
 }

@@ -6,8 +6,12 @@ import ar.com.mq.expedientes.api.model.dto.AreaDTO;
 
 public interface AreaService {
 
-    void save (AreaDTO area);
+	void save(AreaDTO area);
 
-    List<AreaDTO> findAll(int page, int size, String search, String orderBy, String orientation);
+	List<AreaDTO> findAll(int page, int size, String search, String orderBy, String orientation);
+
+	AreaDTO update(AreaDTO area, Long areaId);
+
+	void delete(Long areaId);
 
 }
