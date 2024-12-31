@@ -23,6 +23,9 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
 	private final DocumentoMapper documentoMapper;
 	private final UsuarioMapper usuarioMapper;
 
+	private final static Integer NO_ES_ESPECIAL = 0;
+	private final static Integer ES_ESPECIAL = 1;
+
 	@Autowired
 	public ExpedienteMapperImpl(DocumentoMapper documentoMapper, UsuarioMapper usuarioMapper) {
 		this.documentoMapper = documentoMapper;
@@ -41,7 +44,7 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
 				.fechaCaratulacion(dto.getFechaCaratulacion()).descripcion(dto.getDescripcion())
 				.codigoTramite(dto.getCodigoTramite()).tipo(dto.getTipo()).monto(dto.getMonto()).estado(dto.getEstado())
 				.responsable(dto.getResponsable()).usuario(Usuario.builder().id(dto.getUsuario().getId()).build())
-				.build();
+				.especial(dto.getEspecial() == null ? NO_ES_ESPECIAL : ES_ESPECIAL).build();
 	}
 
 	@Override
@@ -49,16 +52,24 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
 		if (ObjectUtils.isEmpty(entity)) {
 			return null;
 		}
-		return ExpedienteDTO.builder().id(entity.getId()).iniciador(entity.getIniciador()).numero(entity.getNumero())
-				.cantidadFojas(entity.getCantidadFojas()).referencia(entity.getReferencia())
+
+		ExpedienteDTO expediente = ExpedienteDTO.builder().id(entity.getId()).iniciador(entity.getIniciador())
+				.numero(entity.getNumero()).cantidadFojas(entity.getCantidadFojas()).referencia(entity.getReferencia())
 				.fechaCaratulacion(entity.getFechaCaratulacion()).descripcion(entity.getDescripcion())
 				.codigoTramite(entity.getCodigoTramite()).tipo(entity.getTipo()).estado(entity.getEstado())
 				.documentos(this.documentoMapper.toListDTO(entity.getDocumentos()))
 				.usuario(UsuarioDTO.builder().id(entity.getUsuario().getId())
 						.apellido(entity.getUsuario().getApellido()).nombre(entity.getUsuario().getNombre()).build())
-				.responsable(entity.getResponsable()).monto(entity.getMonto()).build();
+				.responsable(entity.getResponsable()).monto(entity.getMonto()).especial(entity.getEspecial()).build();
 
-		// TODO: Quitar campos extras.
+		// Si tiene marca de expediente especial tiene que ir con -B
+		if (expediente.getEspecial() != null && ES_ESPECIAL.equals(expediente.getEspecial())) {
+			String nuevoNumeroDeExpediente = expediente.getNumero().concat("-B");
+			expediente.setNumero(nuevoNumeroDeExpediente);
+		}
+
+		return expediente;
+
 	}
 
 	@Override

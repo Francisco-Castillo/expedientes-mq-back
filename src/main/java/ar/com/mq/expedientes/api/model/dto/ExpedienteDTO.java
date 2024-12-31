@@ -46,4 +46,6 @@ public class ExpedienteDTO extends MunicipalidadMQDTO {
 	private UsuarioBaseDTO usuarioEmisor;
 
 	private String responsable;
+
+	private Integer especial;
 }
