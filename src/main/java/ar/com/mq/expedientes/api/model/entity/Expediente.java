@@ -83,6 +83,8 @@ public class Expediente extends MunicipalidadMQEntity {
 
 	private String responsable;
 
+	private Integer especial;
+
 	@Override
 	public Serializable getPrimaryKey() {
 		return id;
